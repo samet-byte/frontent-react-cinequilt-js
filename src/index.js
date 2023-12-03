@@ -1,17 +1,55 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+import './index.css';
+import {AuthProvider} from "./context/AuthProvider";
+
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+// import 'react-toastify/dist/ReactToastify.css';
+// import 'react-lazy-load-image-component/src/effects/blur.css';
+// import 'react-lazy-load-image-component/src/effects/black-and-white.css';
+// 👇️ IMPORTANT: use correct ID of your root element
+// this is the ID of the div in your index.html file
+// const rootElement = document.getElementById('root');
+// const root = createRoot(rootElement);
+
+// 👇️ if you use TypeScript, add non-null (!) assertion operator
+// const root = createRoot(rootElement!);
+
+// root.render(
+//     <StrictMode>
+//         <BrowserRouter>
+//             <AuthProvider>
+//                 <Routes>
+//                     <Route path="/*" element={<App/>}/>
+//                 </Routes>
+//             </AuthProvider>
+//         </BrowserRouter>
+//     </StrictMode>,
+// );
+
+
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/*" element={<App/>}/>
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+
+
