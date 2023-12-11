@@ -9,7 +9,7 @@ const useRefreshToken = () => {
         const response = await axios.get('/auth/refresh', {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('refreshToken')}`
+                'Authorization': `Bearer ${Cookies.get('refreshToken')} `
             },
             withCredentials: true
         });
@@ -20,7 +20,8 @@ const useRefreshToken = () => {
             return {
                 ...prev,
                 roles: response.data.roles,
-                accessToken: response.data.accessToken
+                accessToken: response.data.accessToken,
+                userId: response.data.userId
             }
         });
         return response.data.accessToken;

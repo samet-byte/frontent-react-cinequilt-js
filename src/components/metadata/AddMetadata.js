@@ -19,6 +19,8 @@ const AddMetadata = () => {
         director : '',
         releaseYear : 2023,
         duration : 0,
+        description : null,
+        genre : null,
         posterUrl: 'https://sdk.bitmoji.com/me/sticker/j78cRDYobOkbHKwnQQDlnCATyVeig0bGqzyNqTVZDdcLtj9hn4hRcg/10227185.png?p=dD1zO2w9ZW4.v1&size=thumbnail',
         videoUrl: '',
         trailerUrl: '',
@@ -31,6 +33,8 @@ const AddMetadata = () => {
         director,
         releaseYear,
         duration,
+        description,
+        genre,
         posterUrl,
         videoUrl,
         soundtrackUrl
@@ -125,6 +129,37 @@ const AddMetadata = () => {
                     // required
                     value={duration}
                     onChange={(e) => handleInputChange(e)}
+                    />
+                </div>
+
+
+                <div className='input-group mb-5'>
+                    <label className='input-group-text' htmlFor='description'>
+                        Description
+                    </label>
+                    <input
+                        className='form-control col-span-small-6'
+                        type='text'
+                        name='description'
+                        id='description'
+                        // required
+                        value={description}
+                        onChange={(e) => handleInputChange(e)}
+                    />
+                </div>
+
+                <div className='input-group mb-5'>
+                    <label className='input-group-text' htmlFor='genre'>
+                        Genre
+                    </label>
+                    <input
+                        className='form-control col-span-small-6'
+                        type='text'
+                        name='genre'
+                        id='genre'
+                        // required
+                        value={genre}
+                        onChange={(e) => handleInputChange(e)}
                     />
                 </div>
 

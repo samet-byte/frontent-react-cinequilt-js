@@ -2,6 +2,7 @@
 // Dec 01, 2023 5:16 PM
 
 import './App.css';
+import './custom.css';
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 
@@ -25,7 +26,11 @@ import M3UList from "./components/local/M3UList";
 import FilmBuff from "./components/FilmBuff";
 import EditMetadata from "./components/metadata/EditMetadata";
 import NavBar from "./components/composes/NavBar";
-import MetadataSearch from "./components/composes/MetadataSearch";
+import {Dropdown} from "react-bootstrap";
+import InstantSearch from "./components/composes/search/InstantSearch";
+import PopSearch from "./components/composes/search/PopSearch";
+import Experimental from "./experimental/Experimental";
+import ServiceUnavailable from "./components/auth/ServiceUnavailable";
 
 
 const ROLES = {
@@ -39,19 +44,20 @@ const NavBarConditional = () => {
     const navigate = useNavigate();
 
     // List of routes where the NavBar should not be displayed
-    const nonNavBarRoutes = ['/login', '/signup', '/giris', '/kaydol', '/register'];
+    const nonNavBarRoutes = ['/login', '/signup', '/giris', '/kaydol', '/register', '/login/', '/service-unavailable', '/unauthorized', '/linkpage', '/linkpage/'];
 
     // Get the current route path
     const currentPath = window.location.pathname;
 
     // Check if the current route is in the list of non-NavBar routes
     const showNavBar = !nonNavBarRoutes.includes(currentPath);
+    // const showNavBar = !nonNavBarRoutes.every((route) => !route.startsWith(currentPath));
+
 
     // Render NavBar only if showNavBar is true
     return showNavBar ? (
         <>
             <NavBar />
-            <MetadataSearch />
         </>
     ) : null;
 
@@ -61,19 +67,28 @@ const NavBarConditional = () => {
 
 
 function App() {
+
+
+
+
     return (
         <main>
 
             <NavBarConditional />
-            {/*<MetadataSearch/>*/}
+            {/*<InstantSearch/>*/}
 
         <Routes>
             <Route path="/" element={<Layout />}>
                 {/* public routes */}
                 <Route path="login" element={<Login />} />
+                {/*<Route path="login/:user" element={<Login />} />*/}
                 <Route path="register" element={<Register />} />
                 <Route path="linkpage" element={<LinkPage />} />
                 <Route path="unauthorized" element={<Unauthorized />} />
+                <Route path="service-unavailable" element={<ServiceUnavailable />} />
+
+
+
 
 
                 {/* we want to protect these routes */}
@@ -125,6 +140,16 @@ function App() {
 
                     <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                         <Route path="/edit-metadata/:id" element={<EditMetadata />} />
+                    </Route>
+
+                    <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+                        <Route path="/search" element={<InstantSearch />} />
+                    </Route>
+
+
+
+                    <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+                        <Route path="/x" element={<Experimental />} />
                     </Route>
 
 

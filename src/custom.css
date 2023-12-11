@@ -1,0 +1,69 @@
+
+.home-user-info {
+        /*display: flex;*/
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        /*max-width: 50px;*/
+
+}
+
+a {
+    text-decoration: none;
+}
+
+
+.center-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*height: 100vh; !* Optional: Set a height to center vertically *!*/
+}
+
+
+
+
+
+/*INSTANT SEARCH*/
+.in-search {
+    margin-bottom: 20px;
+}
+
+
+/* ADMIN */
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center; /* Optional: Center text within each div */
+}
+
+/* Add any additional styling for your other elements as needed */
+.flexGrow {
+    margin-top: 10px; /* Add margin for spacing between links */
+}
+
+/* Apply the 'flexGrow' class to the elements you want to grow */
+.flexGrow a {
+    text-decoration: none;
+    color: #ff0000;
+}
+
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+html {
+    /* this makes sure the padding and the border is included in the box sizing */
+    box-sizing: content-box;
+    overflow-x: scroll;
+    display: inline-block;
+}
+
+html body {
+    padding: 0;
+    margin: 0;
+    overflow-x: inherit;
+}

@@ -11,3 +11,100 @@ import ReactDOM from 'react-dom';
 
 
 
+
+
+    const { user: pUser, accessToken } = useParams();
+    // console.log(pUser + " \n" + roles + " \n" + accessToken)
+
+    const qrAuth = async () => {
+        if (pUser && accessToken
+            // && roles
+        ) {
+            // const roleArray = [roles]
+            setAuth({ user: pUser, pwd:'',  accessToken });
+
+            console.log("QR Auth: " + auth?.user + " \n" + auth?.roles + " \n" + auth?.accessToken)
+            navigate(from, { replace: true });
+            // navigate('view-metadatas', { replace: true });
+            // await handleSubmit()
+        }
+    }
+
+
+
+
+// Author: sametbayat
+// Dec 08, 2023 11:09 PM
+
+import React, {useEffect} from 'react';
+import useAuth from "../../hooks/useAuth";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import axios from "../../api/axios";
+
+function QrAuth() {
+
+    const { setAuth } = useAuth(); // global auth
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+    const LOGIN_URL = '/auth/authenticate';
+
+    const { user, pwd } = useParams();
+
+    console.log(user)
+    console.log(pwd)
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(LOGIN_URL,
+                JSON.stringify({ emailOrUsername: user, password: pwd }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            );
+            console.log(JSON.stringify(response?.data));
+            //console.log(JSON.stringify(response));
+            const accessToken = response?.data?.accessToken;
+            const roles = response?.data?.roles;
+            console.log(roles)
+
+            localStorage.setItem('username', user)
+
+            setAuth({ user, pwd, roles, accessToken });
+            navigate(from, { replace: true });
+        } catch (err) {
+            alert('Error: ' + err?.response?.data?.message)
+        }
+    }
+
+
+    useEffect(() => {
+        if(user && pwd) {
+            handleSubmit();
+            navigate(from, { replace: true });
+        }
+    }, []);
+
+    return (
+        <div>
+            <h1>QR Auth</h1>
+            <h3>user: {user}</h3>
+        </div>
+    );
+}
+
+export default QrAuth;
+
+
+<Route path="/qr/:user/:roles/:accessToken" element={<Login />} />
+
+
+const [userInfo, setUserInfo] = useState(null);
+    const [fIP, setfIP]  = useState("http://" + ip + ":3000")
+
+    useEffect(() => {
+        setfIP("http://" + ip + ":3000" + `/qr/${localStorage.getItem("username")}/${"ROLE_ADMIN"}/${auth?.accessToken}`)
+    }, [userInfo]);

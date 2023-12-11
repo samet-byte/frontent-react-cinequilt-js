@@ -93,7 +93,7 @@ const Register = () => {
             return;
         }
 
-        alert(JSON.stringify({ username: user, email: email, password: pwd, country: selectedCountry?.value, role: 'USER' }));
+        console.log(JSON.stringify({ username: user, email: email, password: pwd, country: selectedCountry?.value, role: 'USER' }));
 
         try {
             const response = await axios.post(REGISTER_URL,
@@ -128,7 +128,7 @@ const Register = () => {
         <>
             <video src={videoBackground} type="video/mp4" autoPlay loop muted className="fullscreen-video" />
             {success ? (
-                <div className="overlay content">
+                <div className="overlay auth-content">
                 <section>
                     <h1 className="authHeader">
                         Let's get your quilt!
@@ -141,7 +141,7 @@ const Register = () => {
                 </section>
                 </div>
             ) : (
-            <div className="overlay content">
+            <div className="overlay auth-content">
                 <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1 className="authHeader">

@@ -6,6 +6,7 @@ const Unauthorized = () => {
     const goBack = () => navigate(-1);
 
     return (
+        <div className="center-item" style={{overflowX: "hidden"}}>
         <section>
             <h1>Unauthorized</h1>
             <br />
@@ -14,6 +15,7 @@ const Unauthorized = () => {
                 <button onClick={goBack}>Go Back</button>
             </div>
         </section>
+        </div>
     )
 }
 

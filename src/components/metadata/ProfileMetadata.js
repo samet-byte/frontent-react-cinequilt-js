@@ -36,7 +36,9 @@ import trvtt from '../video/tr.vtt?url'
 import envtt from '../video/en.vtt?url'
 import SoundtrackEmbed from '../composes/SoundtrackEmbed';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-
+import {FaHeart} from "react-icons/fa";
+import FavoriteButton from "../composes/FavouriteButton";
+import useAuth from "../../hooks/useAuth";
 
 function showEditRowIfAvailable(url, desc) {
 	return <>
@@ -61,6 +63,8 @@ const ProfileMetadata = () => {
 	const location = useLocation();
 	const axiosPrivate = useAxiosPrivate();
 
+	const { auth } = useAuth();
+
 	const[metadata, setmetadata] = useState({
         title : '',
         director : '',
@@ -72,17 +76,6 @@ const ProfileMetadata = () => {
 		soundtrackUrl: null
 	});
 
-	// useEffect(() => {
-	// 	loadmetadata();
-	// }, []);
-	//
-	// const loadmetadata = async () => {
-	// 	const result = await axios.get(
-	// 		// `http://localhost:9192/metadatas/metadata/${id}`
-	// 		`http://localhost:9192/metadatas/metadata/title/${title}`
-	// 	);
-	// 	setmetadata(result.data);
-	// };
 
 	useEffect(() => {
 		let isMounted = true;
@@ -127,6 +120,19 @@ const ProfileMetadata = () => {
 
 		window.location.href = 'https://sametb.com';
 	};
+
+	const ParentFavButton = () => {
+		const metadataId = metadata.id;
+		const userId = auth?.userId || -1;
+
+		console.log("userId: " + userId);
+
+		if (userId !== -1) {
+		return <FavoriteButton metadataId={metadataId} userId={userId} />;
+		}
+	};
+
+
 
 	return (
 		<sam
@@ -181,14 +187,33 @@ const ProfileMetadata = () => {
 											Trailer
 										</button>
 									}
-
-
-
 									{
+
+
+										<button
+											type="button"
+											className="btn btn-outline-dark ms-1"
+											onClick={() => {
+												navigate(`/edit-metadata/${metadata.id}`)
+											}}
+										>
+											Edit
+										</button>
+									}
+
+
+
+								</div>
+									{
+
+
+
 
 									}
 
-								</div>
+								{
+									<ParentFavButton/>
+								}
 							</div>
 						</div>
 
@@ -225,34 +250,21 @@ const ProfileMetadata = () => {
 
 								{/*<EditRow metadata={metadata.posterUrl} contentString="Poster URL" />*/}
 
-
-
-
-
-
-
 								<SoundtrackEmbed soundtrackLink={metadata.soundtrackUrl}/>
 								{/* <SoundtrackEmbed soundtrackLink={"https://www.deezer.com/us/album/294596"}/> */}
 
 								<OtherPlayer metadata={metadata}/>
 
 
-								
-
-
-
 								{/*<iframe title="deezer-widget" src="https://widget.deezer.com/widget/dark/album/294596"*/}
 								{/*		width="100%" height="300" frameBorder="0" allowTransparency="true"*/}
 								{/*		allow="encrypted-media; clipboard-write"></iframe>*/}
-
 
 								{/*<VideoEmbed embedUrl={*/}
 								{/*	"https://my.mail.ru/video/embed/7706774030430244614"*/}
 								{/*	// "http://192.168.1.69:9876/1_Friends%201.%20Sezon%209.%20B%C3%B6l%C3%BCm%20izle%20-%20SezonlukDizi.mp4"*/}
 								{/*}/>*/}
 
-
-								
 								<VideoEmbed embedUrl={metadata.videoUrl}/>
 
 								{/*<VideoPlayer src={*/}

@@ -13,6 +13,7 @@ const Missing = () => {
     };
 
     return (
+        <div className="center-item" style={{overflowX: "hidden"}}>
         <article style={{ padding: "100px" }}>
             <h1>Oops!</h1>
             <p>Page Not Found</p>
@@ -21,6 +22,7 @@ const Missing = () => {
                 <Lottie animationData={animationData} options={defaultOptions} height="50%" width="60%" />
             </div>
         </article>
+        </div>
     )
 }
 

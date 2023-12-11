@@ -158,9 +158,19 @@ let count = 0;
 function OtherPlayer({metadata}) {
 
   let videoUrl =
-      // "http://192.168.1.69:8009/1080pTCB.mp4";
+    // "https://sametb.com/enough.mp4"
+
+
+"http://localhost:1234/LM386%20Audio%20Amplifier%20Simple%20Setup_1080p.mp4"
+      // "http://localhost:1234/Master%20Java%20Full%20Stack%20Development%20with%20Spring%20Boot%20and%20ReactJS.mp4"
+
+
+      // "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+    // "https://videoseyred.in/embed/316555"
+
+
+  // "http://192.168.1.69:8009/1080pTCB.mp4";
       // "http://192.168.1.69:9876/1_Friends%201.%20Sezon%209.%20B%C3%B6l%C3%BCm%20izle%20-%20SezonlukDizi.mp4"
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
   // "https://my.mail.ru/video/embed/7706774030430244614";
       // "https://kanaldvod.duhnet.tv/hls/C/6J/yar70_blm/yar70_blm.smil/hlssubplaylist-ovbnGvek_oacnsx7.m3u8";
         // "https://www.youtube.com/watch?v=mbSKrX6mWzk"

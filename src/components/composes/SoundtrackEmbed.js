@@ -65,7 +65,8 @@ const SoundtrackEmbed = ({ soundtrackLink }) => {
 
         } else {
             // Unsupported platform
-            return 'Unsupported platform';
+            // return 'Unsupported platform';
+            return null;
         }
     };
 

@@ -2,6 +2,8 @@ import { Link } from "react-router-dom"
 
 const Lounge = () => {
     return (
+        <div className="center-item">
+
         <section>
             <h1>The Lounge</h1>
             <br />
@@ -10,6 +12,7 @@ const Lounge = () => {
                 <Link to="/">Home</Link>
             </div>
         </section>
+        </div>
     )
 }
 

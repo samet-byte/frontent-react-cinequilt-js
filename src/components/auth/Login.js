@@ -2,9 +2,9 @@ import { useRef, useState, useEffect } from 'react';
 import './auth.css'
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import {Link, useNavigate, useLocation, useParams} from "react-router-dom";
 
-import videoBackground from '../../assets/video/thePianist1080.mp4';
+import videoBackground from '../../assets/video/plastic_bag.mp4';
 const LOGIN_URL = '/auth/authenticate';
 
 const Login = () => {
@@ -45,9 +45,9 @@ const Login = () => {
             //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
-            console.log(roles)
-
-            setAuth({ user, pwd, roles, accessToken });
+            const userId = response?.data?.userId;
+            console.log("userId: " + userId);
+            setAuth({ user, pwd, roles, accessToken, userId });
             setUser('');
             setPwd('');
             navigate(from, { replace: true });
@@ -72,16 +72,21 @@ const Login = () => {
 
     useEffect(() => {
         localStorage.setItem("persist", persist);
-        if(!persist) {localStorage.removeItem('username')}
-        else {localStorage.setItem('username', user)}
-    }, [persist, user])
+        // if(!persist) {localStorage.removeItem('username')}
+        // else {localStorage.setItem('username', user)}
+    }, [persist])
 
 
 
     return (
         <div>
-            <video src={videoBackground} type="video/mp4" autoPlay loop muted className="fullscreen-video" />
-                <div className="overlay content">
+            <video
+                src={
+                videoBackground
+                //     "http://localhost:1234/y2mate.com%20-%20American%20Beauty%20%20Thomas%20Newman%20from%20the%20plastic%20bag%20scene_480p.mp4"
+            }
+                type="video/mp4" autoPlay loop muted className="fullscreen-video" />
+                <div className="overlay auth-content">
                     <h1 className="authHeader">
                         Quilted Joy,<br/>
                         Cinematic Bliss..
@@ -108,16 +113,6 @@ const Login = () => {
                             value={pwd}
                             required
                         />
-
-
-                        {/*<button*/}
-                        {/*    disabled={!validName || !validPwd || !validMatch || !selectedCountry}*/}
-                        {/*    style={buttonStyle}*/}
-                        {/*    onMouseOver={handleMouseOver}*/}
-                        {/*    onMouseOut={handleMouseOut}*/}
-                        {/*>*/}
-                        {/*    Wrap Me into Cinematic Warmth*/}
-                        {/*</button>*/}
 
                         <br/>
                         <button className="btn btn-outline-warning">

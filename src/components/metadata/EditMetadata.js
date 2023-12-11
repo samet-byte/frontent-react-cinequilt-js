@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import {axiosPrivate} from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
+import Constants from "../../common/Constants";
 
 const EditMetadata = () => {
 
@@ -19,13 +20,15 @@ const EditMetadata = () => {
         director : '',
         releaseYear : 2023,
         duration : 0,
-        posterUrl: 'https://sdk.bitmoji.com/me/sticker/j78cRDYobOkbHKwnQQDlnCATyVeig0bGqzyNqTVZDdcLtj9hn4hRcg/10227185.png?p=dD1zO2w9ZW4.v1&size=thumbnail',
-        videoUrl: '',
-        soundtrackUrl: ''
+        description : null,
+        genre : null,
+        posterUrl: Constants.POSTER_PLACEHOLDER_URL,
+        videoUrl: null,
+        soundtrackUrl: null
 
     })
 
-    const {title, director, releaseYear, duration, posterUrl, videoUrl, soundtrackUrl} = metadata;
+    const {title, director, releaseYear, duration, description, genre, posterUrl, videoUrl, soundtrackUrl} = metadata;
 
 
     useEffect(() => {
@@ -82,12 +85,14 @@ const EditMetadata = () => {
             await axiosPrivate.put(`/metadatas/${id}`,
                 JSON.stringify({
                     title: title,
-                    director: director,
-                    releaseYear: releaseYear,
-                    duration: duration,
-                    posterUrl: posterUrl,
-                    videoUrl: videoUrl,
-                    soundtrackUrl: soundtrackUrl
+                    director: director === "" ? null : director,
+                    releaseYear: releaseYear === "" ? 0 : releaseYear,
+                    duration: duration === "" ? 0 : duration,
+                    description: description === "" ? null : description,
+                    genre: genre === "" ? null : genre,
+                    posterUrl: posterUrl === "" ? Constants.POSTER_PLACEHOLDER_URL : posterUrl,
+                    videoUrl: videoUrl === "" ? null : videoUrl,
+                    soundtrackUrl: soundtrackUrl === "" ? null : soundtrackUrl
                 }), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -168,6 +173,36 @@ const EditMetadata = () => {
                     id='duraiton'
                     // required
                     value={duration}
+                    onChange={(e) => handleInputChange(e)}
+                    />
+                </div>
+
+                <div className='input-group mb-5'>
+                    <label className='input-group-text' htmlFor='description'>
+                        Description
+                    </label>
+                    <input
+                    className='form-control col-span-small-6'
+                    type='text'
+                    name='description'
+                    id='description'
+                    // required
+                    value={description}
+                    onChange={(e) => handleInputChange(e)}
+                    />
+                </div>
+
+                <div className='input-group mb-5'>
+                    <label className='input-group-text' htmlFor='genre'>
+                        Genre
+                    </label>
+                    <input
+                    className='form-control col-span-small-6'
+                    type='text'
+                    name='genre'
+                    id='genre'
+                    // required
+                    value={genre}
                     onChange={(e) => handleInputChange(e)}
                     />
                 </div>

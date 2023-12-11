@@ -11,11 +11,14 @@ const useLogout = () => {
         setAuth({});
             Cookies.remove('refreshToken');
             localStorage.removeItem('refreshToken');
+            if (localStorage.getItem('persist') === 'false') {
+                localStorage.removeItem('username');
+            }
         try {
             const response = await axios('/auth/logout', {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
+                    'Authorization': `Bearer ${accessToken} `
 
                 },
                 withCredentials: true
@@ -23,6 +26,9 @@ const useLogout = () => {
         } catch (err) {
             console.error(err);
         }
+
+        // logout();
+
     }
 
     return logout;
