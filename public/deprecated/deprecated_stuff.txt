@@ -108,3 +108,58 @@ const [userInfo, setUserInfo] = useState(null);
     useEffect(() => {
         setfIP("http://" + ip + ":3000" + `/qr/${localStorage.getItem("username")}/${"ROLE_ADMIN"}/${auth?.accessToken}`)
     }, [userInfo]);
+
+
+
+
+
+
+                {/*<div className='input-group mb-5'>*/}
+                {/*    <label className='input-group-text' htmlFor='genre'>*/}
+                {/*        Genre*/}
+                {/*    </label>*/}
+                {/*    <select*/}
+                {/*        className='form-control col-span-small-6'*/}
+                {/*        name='genre'*/}
+                {/*        id='genre'*/}
+                {/*        // required*/}
+                {/*        value={genre}*/}
+                {/*        onChange={handleInputChange}*/}
+                {/*    >*/}
+                {/*        <option value=''>Select Genre</option>*/}
+                {/*        {ALL_GENRES.map((genre) => (*/}
+                {/*            <option key={genre.id} value={genre.id}>*/}
+                {/*                {genre.name}*/}
+                {/*            </option>*/}
+                {/*        ))}*/}
+                {/*    </select>*/}
+                {/*</div>*/}
+
+
+
+
+
+
+
+
+
+
+
+
+
+                */}
+
+                {/*<div className='input-group mb-5'>*/}
+                {/*    <label className='input-group-text' htmlFor='posterUrl'>*/}
+                {/*        Poster URL*/}
+                {/*    </label>*/}
+                {/*    <input*/}
+                {/*    className='form-control col-span-small-6'*/}
+                {/*    type='text'*/}
+                {/*    name='posterUrl'*/}
+                {/*    id='posterUrl'*/}
+                {/*    // required*/}
+                {/*    value={posterUrl}*/}
+                {/*    onChange={(e) => handleInputChange(e)}*/}
+                {/*    />*/}
+                {/*</div>*/}

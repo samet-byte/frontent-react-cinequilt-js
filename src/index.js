@@ -1,6 +1,6 @@
-import React from 'react';
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
+import React from 'react';
 import App from './App';
 
 import './index.css';
@@ -11,6 +11,24 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/*" element={<App/>}/>
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById('root')
+);
+
+
+
 // import 'bootstrap-icons/font/bootstrap-icons.css';
 // import 'react-toastify/dist/ReactToastify.css';
 // import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -34,22 +52,4 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 //         </BrowserRouter>
 //     </StrictMode>,
 // );
-
-
-import ReactDOM from 'react-dom';
-
-ReactDOM.render(
-    <React.StrictMode>
-        <BrowserRouter>
-            <AuthProvider>
-                <Routes>
-                    <Route path="/*" element={<App/>}/>
-                </Routes>
-            </AuthProvider>
-        </BrowserRouter>
-    </React.StrictMode>,
-    document.getElementById('root')
-);
-
-
 

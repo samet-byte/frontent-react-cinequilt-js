@@ -11,6 +11,7 @@ import Crsl from "./Crsl";
 import UserCard from "../components/composes/UserCard";
 import Enav from "./Enav";
 import CardE from "./CardE";
+import OffCanvasFilter from "../components/OffCanvasFilter";
 // import * as myd from "./data.json";
 // const {slides} = myd;
 
@@ -35,7 +36,11 @@ export const Experimental = () => {
        //   imageUrl="https://i.ibb.co/ncrXc2V/1.png"
        // />
        // </div>
-       <>   </>
+       <>
+
+         <OffCanvasFilter/>
+
+       </>
    );
 };
 export default Experimental;
