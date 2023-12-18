@@ -12,7 +12,7 @@ export const axiosPrivate = axios.create({
     withCredentials: true
 });
 
-export const customPrivate = = axios.create({
+export const customPrivate = axios.create({
     baseURL: BASE_URL,
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true

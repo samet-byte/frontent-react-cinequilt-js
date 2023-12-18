@@ -122,12 +122,12 @@ const AllMetadatas = () => {
                 isMounted && setMetadatas(response.data);
             } catch (err) {
                 console.log(err);
-                if (err.name !== 'CanceledError') { // Ignore canceled requests, without this 'return' statement, called immediately
+                /*if (err.name !== 'CanceledError') { // Ignore canceled requests, without this 'return' statement, called immediately
                     err.response?.status === 403
                         ? alert(err.name + ' -> Unauthorized or Access Token Expired')
                         : alert(err.name + ' -> ' + err.message);
                     navigate('/login', { state: { from: location }, replace: true });
-                }
+                }*/
             }
         }
 
