@@ -16,6 +16,8 @@ import {ShouldShow} from "../../common/ShouldShow";
 import Constants from "../../common/Constants";
 import {DeleteMetadataButton} from "../composes/DeleteMetadataButton";
 import {FaEdit} from "react-icons/fa";
+import Loading from "../composes/Loading";
+
 
 
 function GoToTrailerButton(metadata) {
@@ -32,22 +34,6 @@ function GoToTrailerButton(metadata) {
 		Trailer
 	</button>;
 }
-
-// function EditMetadataButton(navigate, metadata) {
-// 	return
-
-
-
-	// <button
-	// 	type="button"
-	// 	className="btn btn-outline-dark ms-1"
-	// 	onClick={() => {
-	// 		navigate(`/edit-metadata/${metadata.id}`)
-	// 	}}
-	// >
-	// 	Edit
-	// </button>;
-// }
 
 function PlayButtonIfExists(metadata) {
 	return metadata.videoUrl != null &&
@@ -81,7 +67,7 @@ function ContentView(metadata, navigate, ParentFavButton) {
 									alt="avatar"
 									className="img-fluid"
 									// className="rounded-circle img-fluid"
-									style={{width: 150}}
+									style={{width: 150, borderRadius: '15px'}}
 								/>
 								<h5 className="my-3">
 									{`${metadata.title} (${metadata.releaseYear})`}
@@ -195,8 +181,9 @@ function NoMetadataView() {
 
 const ProfileMetadata = () => {
 
+	const [isLoaded, setIsLoaded] = useState(false);
+
     // let navigate = useNavigate();
-	const { id } = useParams();
 	const { title } = useParams();
 
 	const navigate = useNavigate();
@@ -224,6 +211,7 @@ const ProfileMetadata = () => {
 		let isMounted = true;
 		const controller = new AbortController();
 
+		isLoaded && setIsLoaded(false);
 		const getInfo = async () => {
 			try {
 				const response = await axiosPrivate.get(`/metadatas/title/single/${title}`, {
@@ -234,6 +222,8 @@ const ProfileMetadata = () => {
 			} catch (err) {
 				console.error(err);
 				navigate('/ooooooooops', { state: { from: location }, replace: false });
+			} finally {
+				isMounted && setIsLoaded(true);
 			}
 		}
 
@@ -258,11 +248,20 @@ const ProfileMetadata = () => {
 		}
 	};
 
+	return (
+		isLoaded ? (
+		metadata ? (
+			ContentView(metadata, navigate, ParentFavButton)
+		) : (
+			NoMetadataView()
+		)
+	) : (
+		<Loading anim="m2" />
+	)
+);
 
-	if (metadata) {
-		return ContentView(metadata, navigate, ParentFavButton);
-	}
-	return NoMetadataView(); // for safety reasons, should never be reached
+
+
 };
 
 export default ProfileMetadata;

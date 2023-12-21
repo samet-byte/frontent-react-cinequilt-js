@@ -163,3 +163,196 @@ const [userInfo, setUserInfo] = useState(null);
                 {/*    onChange={(e) => handleInputChange(e)}*/}
                 {/*    />*/}
                 {/*</div>*/}
+
+
+
+                /*
+                import React from 'react';
+
+
+                const MovieCard = ({ title, year, posterUrl }) => {
+                    return (
+                        <div className="card mb-3 justify-content-center" style={styles.card}>
+                            <div className="row no-gutters">
+                                <div className="col-md-4">
+                                    <img src={posterUrl} alt="Movie Poster" className="img-fluid" style={styles.image} loading="lazy"/>
+                                </div>
+                                <div className="col-md-8 d-flex align-items-center">
+                                    <div className="p-3">
+                                        <h6>{title}</h6>
+                                        <p>{year}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                };
+
+                const styles = {
+                    card: {
+                        maxWidth: '400px',
+                    },
+                    image: {
+                        width: '100%',
+                        height: 'auto',
+                    },
+                };
+
+                export default MovieCard;
+                */
+
+
+
+// ['/login', '/signup', '/giris', '/kaydol', '/register', '/login/', '/service-unavailable', '/unauthorized', '/linkpage', '/linkpage/'];
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import {Link} from 'react-router-dom';
+// import { Nav, Navbar } from 'react-bootstrap';
+// import Constants from '../../common/Constants';
+// import PopSearch from "./search/PopSearch";
+// import useLogout from "../../hooks/useLogout";
+//
+// const NavBar = () => {
+//     const w_h = 50;
+//     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+//
+//     useEffect(() => {
+//         const handleResize = () => {
+//             setWindowWidth(window.innerWidth);
+//         };
+//
+//         window.addEventListener('resize', handleResize);
+//
+//         return () => {
+//             window.removeEventListener('resize', handleResize);
+//         };
+//     }, []);
+//
+//     const navbarClass = `navbar navbar-dark bg-dark mb-5 ${windowWidth < 576 ? 'navbar-expand-sm' : 'navbar-expand-md'}`;
+//
+//     const logout = useLogout();
+//
+//     const signOut = async () => {
+//         await logout();
+//     }
+//
+//     return (
+//         <Navbar collapseOnSelect className={navbarClass} bg="dark" variant="dark" expand="lg">
+//             <Navbar.Brand href="/">
+//                 <img
+//                     alt=""
+//                     src={Constants.APP_ICON_URL}
+//                     width={w_h}
+//                     height={w_h}
+//                     className="d-inline-block align-top"
+//                     loading="lazy"
+//                 />
+//                 {' '}
+//             </Navbar.Brand>
+//             <Navbar.Toggle aria-controls="basic-navbar-nav" />
+//             <Navbar.Collapse id="basic-navbar-nav">
+//                 <Nav className="mr-auto">
+//                     <Nav.Link style={{ color: 'white' }} href="/">
+//                         {Constants.APP_NAME}
+//                     </Nav.Link>
+//                     <Link to={'/'} className="nav-link">Home</Link>
+//                     <Nav.Link href="/view-metadatas">View All of 'em</Nav.Link>
+//                     {' '}
+//                     <Nav.Link href="/add-metadata">Add new Content</Nav.Link>
+//                     {' '}
+//                     <Nav.Link href="/local">Local Files</Nav.Link>
+//                     {' '}
+//                     <Nav.Link href="/filmbuff">Film Buff</Nav.Link>
+//                     {' '}
+//                     <Nav.Link href="/search">Instant Search</Nav.Link>
+//                     {' '}
+//                     <PopSearch />
+//                     {' '}
+//                     <Nav.Link onClick={signOut} className="ms-2">Sign Out</Nav.Link>
+//                     {' '}
+//                     <Nav.Link href="/x">Experimental</Nav.Link>
+//                 </Nav>
+//             </Navbar.Collapse>
+//         </Navbar>
+//     );
+// };
+//
+// export default NavBar;
+
+
+
+            {/*<Row className="mt-4">*/}
+            {/*    {filteredMetadatas.map((metadata, index) => (*/}
+            {/*        <Col key={metadata.id} xs={12} sm={6} md={4} lg={3}>*/}
+            {/*            <Card className="text-center">*/}
+            {/*                <Link to={`/metadata-profile/${metadata.title}`} className="btn btn-info">*/}
+
+            {/*                    <MovieCard*/}
+            {/*                        title={metadata.title?.trim()}*/}
+            {/*                        posterUrl={metadata.posterUrl}*/}
+            {/*                        releaseYear={metadata.releaseYear}*/}
+            {/*                        mediaType={metadata.type}*/}
+            {/*                    />*/}
+            {/*                </Link>*/}
+            {/*            </Card>*/}
+            {/*        </Col>*/}
+            {/*    ))}*/}
+            {/*</Row>*/}
+
+
+            {/*<table  className='table table-responsive table-bordered table-hover shadow'>*/}
+            {/*    <thead>*/}
+            {/*    <tr className='text-center'>*/}
+            {/*        <th colSpan={2}>{SortView(sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber)}</th>*/}
+            {/*        <th>Title</th>*/}
+            {/*        <th>Director</th>*/}
+            {/*        <th>Release Year</th>*/}
+            {/*        <th>Duration</th>*/}
+            {/*        <th>Genre</th>*/}
+            {/*        <th>Type</th>*/}
+            {/*    </tr>*/}
+            {/*    </thead>*/}
+
+            {/*    <tbody className="text-center">*/}
+            {/*    {filteredMetadatas.map((metadata, index) => (*/}
+
+            {/*        <tr key={metadata.id}>*/}
+            {/*            <th scope="row" key={index}>{metadata.id}</th>*/}
+            {/*            <Link to={`/metadata-profile/${metadata.title}`} className="btn btn-info">*/}
+            {/*                <td>*/}
+            {/*                    <img*/}
+            {/*                        width={270 / 4}*/}
+            {/*                        height={370 / 4}*/}
+            {/*                        src={metadata.posterUrl}*/}
+            {/*                        alt={metadata.title}*/}
+            {/*                        loading={'lazy'}*/}
+            {/*                    />*/}
+            {/*                </td>*/}
+            {/*            </Link>*/}
+
+            {/*            <td>{metadata.title}</td>*/}
+            {/*            <td>{metadata.director}</td>*/}
+            {/*            <td>{metadata.releaseYear}</td>*/}
+            {/*            <td>{metadata.duration}</td>*/}
+            {/*            <td>{metadata.genre}</td>*/}
+            {/*            <td>{metadata.type}</td>*/}
+
+
+            {/*        </tr>*/}
+            {/*    ))}*/}
+            {/*    </tbody>*/}
+            {/*</table>*/}
+
+
+             {/* <MovieCard
+                                                   title={metadata.title}
+                                                    posterUrl={metadata.posterUrl}
+                                                    mediaType={metadata.type}
+                                                    releaseYear={metadata.releaseYear}
+                                                    linkTo={`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`}
+                                                    />*/}
+
+
+

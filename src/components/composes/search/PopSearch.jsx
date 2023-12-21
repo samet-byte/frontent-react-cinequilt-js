@@ -3,12 +3,32 @@
 
 import {axiosPrivate} from "../../../api/axios";
 import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import {Card, Modal} from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Link} from "react-router-dom";
-import MovieCard from "../common/MovieCard";
-import Experimental from "../../../experimental/Experimental";
+import {Link, useNavigate} from "react-router-dom";
+import Paths from "../../../common/Paths";
+
+const MetadataCard = ({ metadata }) => {
+    const getMediaTypeEmoji = () => {
+        return metadata.type === 'TV_SHOW' ? '📺' : '🎬';
+    };
+
+    return (
+        <Link to={`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`} style={{ textDecoration: 'none' }}>
+        <Card className="mb-1 custom-hover-card custom-card">
+            <Card.Body>
+                <Card.Text>
+                        <span className="text-muted">{getMediaTypeEmoji()}</span> {metadata.mediaType}
+                        {metadata.title}
+                </Card.Text>
+            </Card.Body>
+        </Card>
+        </Link>
+    );
+};
+
+
 
 const SearchComponent = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -19,7 +39,7 @@ const SearchComponent = () => {
         // Fetch metadata based on the search query
         const fetchMetadata = async () => {
             try {
-                const response = await axiosPrivate.get(`/metadatas/search/${searchQuery}`);
+                const response = await axiosPrivate.get(`/metadatas/search/${encodeURIComponent(searchQuery)}`);
                 setMetadataList(response.data);
                 //setShowModal(true); // Show modal when data is fetched
             } catch (error) {
@@ -27,23 +47,20 @@ const SearchComponent = () => {
             }
         };
 
-        // Fetch metadata only if the search query is not empty
         if (searchQuery.trim() !== '') {
-            fetchMetadata();
+            fetchMetadata().then(_ => {});
         } else {
-            setMetadataList([]); // Clear the list if the search query is empty
-            setShowModal(false); // Hide modal when input is empty
+            setMetadataList([]);
+            setShowModal(false);
         }
     }, [searchQuery]); //searchQuery
 
     const handleInputChange = (event) => {
         const newSearchQuery = event.target.value;
         setSearchQuery(newSearchQuery);
-        // setSearchQuery(newSearchQuery);
     };
 
     const handleShowModal = () => {
-        // You can add additional logic here if needed
         setShowModal(true);
     };
 
@@ -54,12 +71,14 @@ const SearchComponent = () => {
     const handleKeyDown = (event) => {
         if (event.key === 'Escape') {
             setSearchQuery('');
-            showModal(false);
+            setShowModal(false);
         }
         else if (event.key === 'Enter' && searchQuery.trim() !== '') {
             handleShowModal();
         }
     }
+
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -70,9 +89,6 @@ const SearchComponent = () => {
                 placeholder="🔍 Pop Search.."
                 onKeyDown={handleKeyDown}
             />
-            {/*<Button variant="primary" onClick={handleShowModal}>*/}
-            {/*    Show Modal*/}
-            {/*</Button>*/}
             {showModal && (
                 <Modal show={showModal} onHide={handleCloseModal} dialogClassName="modal-dialog-top">
                             {/*<Experimental/>*/}
@@ -83,31 +99,24 @@ const SearchComponent = () => {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body style={{alignContent: "center"}}>
-                        {/*<ul>*/}
                             {metadataList.map((metadata) => (
-                                <Link to={`/metadata-profile/${metadata.title}`}
-                                      onClick={() => showModal(false)}
+                                // <Link to={`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`}
+                                <div
+                                      onClick={() => {
+                                          setShowModal(false)
+                                          navigate(`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`, { replace: true })
+                                          navigate(0)
+                                      }}
                                       style={{textDecoration: 'none'}}
                                 >
-                                    <MovieCard
-                                       title={metadata.title}
-                                        posterUrl={metadata.posterUrl}
-                                        year={metadata.releaseYear}
-                                        />
-                                {/*}*/}
-                                {/*<div>*/}
-                                {/*    <img src={metadata.posterUrl} height={160} alt={metadata.title} />*/}
-                                {/*    {metadata.id}. {metadata.title}*/}
-                                {/*</div>*/}
-                                </Link>
+
+                                    {/*<Link to={`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`}>{metadata.title}</Link>*/}
+                                    <MetadataCard metadata={metadata} />
+
+
+                                    </div>
                             ))}
-                        {/*</ul>*/}
                     </Modal.Body>
-                    {/*<Modal.Footer>*/}
-                    {/*    <Button variant="secondary" onClick={handleCloseModal}>*/}
-                    {/*        Close*/}
-                    {/*    </Button>*/}
-                    {/*</Modal.Footer>*/}
                 </Modal>
             )}
         </div>

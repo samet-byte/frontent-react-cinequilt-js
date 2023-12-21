@@ -3,10 +3,11 @@ import './auth.css'
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
 import {Link, useNavigate, useLocation} from "react-router-dom";
-
+import animData from "../../assets/anim/loading_dot.json";
 import videoBackground from '../../assets/video/plastic_bag.mp4';
 import useUserStuff from "../../hooks/useUserStuff";
 import Constants from "../../common/Constants";
+import Lottie from "lottie-react";
 const LOGIN_URL = '/auth/authenticate';
 
 const Login = () => {
@@ -25,6 +26,8 @@ const Login = () => {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const findCountryLabel = (value) => {
         const country = Constants.COUNTRIES.find((country) => country.value === value);
         return country ? country.label : 'Unknown Country';
@@ -40,6 +43,8 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setIsLoading(true)
 
         try {
             const response = await axios.post(LOGIN_URL,
@@ -66,6 +71,9 @@ const Login = () => {
                 country: {value: country, label: findCountryLabel(country)},
                 roles: {all: roles, main: roles[roles.length - 1]}
             })
+
+
+
             setUser('');
             setPwd('');
             navigate(from, { replace: true });
@@ -80,6 +88,8 @@ const Login = () => {
                 setErrMsg('Login Failed');
             }
             errRef.current.focus();
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -92,7 +102,7 @@ const Login = () => {
         localStorage.setItem("persist", persist);
         // if(!persist) {localStorage.removeItem('username')}
         // else {localStorage.setItem('username', user)}
-    }, [persist])
+    }, [])
 
 
 
@@ -130,8 +140,10 @@ const Login = () => {
                         />
 
                         <br/>
-                        <button className="btn btn-outline-warning">
-                            Wrap Me into Cinematic Warmth
+                        <button className="btn btn-outline-warning center-item">
+                            {isLoading ?
+                                <Lottie className={'center-item'} animationData={animData} style={{width: 50, height: 50}}/> : <>Wrap Me into
+                                    Cinematic Warmth</>}
                         </button>
 
                         <div className="persistCheck">

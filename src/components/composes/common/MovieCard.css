@@ -1,0 +1,46 @@
+/* MovieCard.css */
+.movie-card {
+    background: #000;
+    position: relative;
+    width: 300px;
+    height: 450px;
+    transition: transform 0.3s cubic-bezier(0.47, 1.64, 0.41, 0.8);
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.input-black-border {
+    border-color: black;
+}
+
+.custom-rounded {
+    border-radius: 230px !important;
+}
+
+/*.custom-carousel .custom-rounded {*/
+/*    border-radius: 100px; !* Adjust the border-radius as needed *!*/
+/*}*/
+
+/*.custom-carousel-item .custom-rounded {*/
+/*    border-radius: 100px; !* Adjust the border-radius as needed *!*/
+/*}*/
+
+
+/*!* Custom styles for the carousel *!*/
+/*.custom-carousel {*/
+/*    width: 100%;*/
+/*    margin-top: 20px; !* Adjust the margin based on your layout *!*/
+/*}*/
+
+/*!* Custom styles for carousel items *!*/
+/*.custom-carousel-item {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*}*/
+
+/*!* Styles for carousel item wrappers *!*/
+/*.carousel-item-wrapper {*/
+/*    margin: 0 10px; !* Adjust the margin based on your layout *!*/
+/*}*/

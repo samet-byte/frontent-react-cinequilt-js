@@ -6,10 +6,15 @@ import React, { useState, useEffect } from 'react';
 // import {axiosPrivate, axios} from "../../api/axios";
 import axios from "../../api/axios";
 import {FaHeart} from "react-icons/fa";
+import Lottie from "lottie-react";
+import animationData from '../../assets/anim/loading_dot.json';
+
 const FavoriteButton = ({ metadataId, userId }) => {
     // console.log("metadataId: " + metadataId)
     const [isFaved, setIsFaved] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
+    // const [isHovered, setIsHovered] = useState(false);
+
+    const [isProcessing, setIsProcessing] = useState(false);
 
 
 
@@ -39,6 +44,7 @@ const FavoriteButton = ({ metadataId, userId }) => {
     }, []);
 
     const handleFavoriteToggle = async () => {
+        setIsProcessing(true);
         try {
             // Make API call to update favorite status
             const response = await axios.post('/favs/isFaved?changeState=true', {
@@ -60,21 +66,23 @@ const FavoriteButton = ({ metadataId, userId }) => {
             }
         } catch (error) {
             console.error('Error updating favorite status:', error);
+        } finally {
+            setIsProcessing(false);
         }
     };
-
-
-    const handleMouseEnter = (e) => {
-        setIsHovered(true);
-
-        // e.target.style.color = isFaved ? (isHovered ? 'red' : 'black') : (isHovered ? 'black' : 'red');
-    };
-
-    const handleMouseLeave = (e) => {
-        setIsHovered(false);
-
-        // e.target.style.color = isFaved ? (isHovered ? 'black' : 'red') : (isHovered ? 'red' : 'black');
-    };
+    //
+    //
+    // const handleMouseEnter = (e) => {
+    //     setIsHovered(true);
+    //
+    //     // e.target.style.color = isFaved ? (isHovered ? 'red' : 'black') : (isHovered ? 'black' : 'red');
+    // };
+    //
+    // const handleMouseLeave = (e) => {
+    //     setIsHovered(false);
+    //
+    //     // e.target.style.color = isFaved ? (isHovered ? 'black' : 'red') : (isHovered ? 'red' : 'black');
+    // };
 
 
     return (
@@ -85,25 +93,29 @@ const FavoriteButton = ({ metadataId, userId }) => {
             className="btn btn-outline ms-1"
             onClick={handleFavoriteToggle}
         >
-            <FaHeart
+            {!isProcessing ?
+                <FaHeart
 
-                size={50}
+                    size={50}
 
-                // color={isFaved ? 'red' : 'black'}
+                    // color={isFaved ? 'red' : 'black'}
 
-                style={{
-                    // border: `2px ${isHovered ? 'red' : 'none'}`,
-                    transition: 'color 0.6s ease', // Smooth transition effect
-                    cursor: 'pointer', // Show pointer cursor on hover
-                    // backgroundColor: isHovered ? 'rgba(255, 0, 0, 0.1)' : 'transparent', // Light red background on hover
-                    color: isFaved ? 'red' : 'black',
-                }}
-                onMouseEnter={(e) => {handleMouseEnter(e)}}
-                onMouseLeave={(e) => {handleMouseLeave(e)}}
-            />
+                    style={{
+                        // border: `2px ${isHovered ? 'red' : 'none'}`,
+                        transition: 'color 0.6s ease', // Smooth transition effect
+                        cursor: 'pointer', // Show pointer cursor on hover
+                        // backgroundColor: isHovered ? 'rgba(255, 0, 0, 0.1)' : 'transparent', // Light red background on hover
+                        color: isFaved ? 'red' : 'black',
+                    }}
+
+                /> :
+                <Lottie className="center-item" animationData={animationData} style={{width: '50px', height: '50px'}}/>}
+                {/*<Lottie animationData={animationData}/>*/}
         </button>
     );
 };
 
 export default FavoriteButton;
 
+                {/* onMouseEnter={(e) => {handleMouseEnter(e)}}*/}
+                {/* onMouseLeave={(e) => {handleMouseLeave(e)}}*/}

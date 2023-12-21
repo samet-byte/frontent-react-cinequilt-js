@@ -1,22 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
-import { findDOMNode } from "react-dom";
 
-import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import ReactPlayer from "react-player";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-import Slider from "@material-ui/core/Slider";
-import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import VolumeUp from "@material-ui/icons/VolumeUp";
-import VolumeDown from "@material-ui/icons/VolumeDown";
-import VolumeMute from "@material-ui/icons/VolumeOff";
-import FullScreen from "@material-ui/icons/Fullscreen";
-import Popover from "@material-ui/core/Popover";
+// import Slider from "@material-ui/core/Slider";
+// import Tooltip from "@material-ui/core/Tooltip";
+// import { findDOMNode } from "react-dom";
+// import AppBar from "@material-ui/core/AppBar";
+// import VolumeUp from "@material-ui/icons/VolumeUp";
+// import VolumeDown from "@material-ui/icons/VolumeDown";
+// import VolumeMute from "@material-ui/icons/VolumeOff";
+// import FullScreen from "@material-ui/icons/Fullscreen";
+// import Popover from "@material-ui/core/Popover";
 import screenful from "screenfull";
 import Controls from "./Controls";
 import trvtt from './tr.vtt?url'
@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PrettoSlider = withStyles({
+/*const PrettoSlider = withStyles({
   root: {
     height: 8,
   },
@@ -137,7 +137,7 @@ function ValueLabelComponent(props) {
       {children}
     </Tooltip>
   );
-}
+}*/
 
 const format = (seconds) => {
   if (isNaN(seconds)) {
@@ -183,9 +183,9 @@ function OtherPlayer({metadata}) {
     videoUrl = metadata.videoUrl;
   }
   const classes = useStyles();
-  const [showControls, setShowControls] = useState(false);
+  // const [showControls, setShowControls] = useState(false);
   // const [count, setCount] = useState(0);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // const [anchorEl, setAnchorEl] = React.useState(null);
   const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
   const [bookmarks, setBookmarks] = useState([]);
   const [state, setState] = useState({

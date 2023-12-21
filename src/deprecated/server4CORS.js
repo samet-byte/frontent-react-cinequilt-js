@@ -2,6 +2,10 @@
 // Dec 03, 2023 1:29 AM
 
 // server.js
+
+// @Deprecated: This is not used anymore
+
+
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
@@ -32,10 +36,11 @@ const createDynamicProxy = target => {
 };
 
 // Use the dynamic proxy middleware for all routes
+// Not safe for production! This is just for demo purposes
 app.use('/:endpoint', (req, res, next) => {
     const dynamicProxyMiddleware = createDynamicProxy(
         // getDynamicTargetURL()
-        // "http://192.168.1.8:9876"
+        // etc. "http://192.168.1.8:9876"
         encodeURIComponent(req.params.endpoint)
     ); // Implement getDynamicTargetURL() based on your logic
     dynamicProxyMiddleware(req, res, next);

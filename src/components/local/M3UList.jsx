@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // import ThumbnailComponent from '../ThumbnailComponent';
 import Lottie from 'lottie-react';
-import errorAnimation from '../../assets/lottie/errorLottie.json';
+import errorAnimation from '../../assets/anim/errorLottie.json';
 import {useParams} from "react-router-dom"; // Replace with the actual path to your Lottie animation JSON file
 
 

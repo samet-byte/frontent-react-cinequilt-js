@@ -32,7 +32,7 @@ const InstantSearch = () => {
 
         // Fetch metadata only if the search query is not empty
         if (searchQuery.trim() !== '') {
-            fetchMetadata();
+            fetchMetadata().then();
         } else {
             setMetadataList([]); // Clear the list if the search query is empty
         }
@@ -64,7 +64,9 @@ const InstantSearch = () => {
                                 <MovieCard
                                     title={metadata.title}
                                     posterUrl={metadata.posterUrl}
-                                    year={metadata.releaseYear}
+                                    releaseYear={metadata.releaseYear}
+                                    mediaType={metadata.type}
+                                    linkTo={`/metadata-profile/${encodeURIComponent(metadata.title)}`}
                                 />
                             </Link>
                         ))}

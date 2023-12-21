@@ -2,11 +2,13 @@
 // Dec 17, 2023 5:02 PM
 
 
-import React from 'react';
+import React, {useState} from 'react';
 import {axiosPrivate} from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import {FaTrashAlt} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
+import Lottie from "lottie-react";
+import animationData from "../../assets/anim/delete.json";
 
 export function DeleteMetadataButton({handleRefresh, id}) {
 
@@ -14,8 +16,13 @@ export function DeleteMetadataButton({handleRefresh, id}) {
     const {auth} = useAuth();
     const navigate = useNavigate();
 
+    const [isProcessStarted, setIsProcessStarted] = useState(false);
+
     const handleDelete = async (id) => {
         // e.preventDefault();
+
+        setIsProcessStarted(true)
+
         try {
             await axiosPrivate.delete(`/metadatas/${id}`, {
                 headers: {
@@ -32,6 +39,7 @@ export function DeleteMetadataButton({handleRefresh, id}) {
             console.error('Error saving metadata:', error);
         } finally {
             // handleRefresh();
+            setIsProcessStarted(false)
             handleRefresh && handleRefresh();
             navigate("/view-metadatas");
         }
@@ -45,7 +53,9 @@ export function DeleteMetadataButton({handleRefresh, id}) {
                 // navigate("/view-metadatas", { replace: true })
             }}
         >
-            <FaTrashAlt/>
+            {!isProcessStarted ?
+                <FaTrashAlt/>
+                : <Lottie animationData={animationData} />}
         </button>
     );
 }

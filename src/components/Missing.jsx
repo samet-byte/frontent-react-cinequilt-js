@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import animationData from '../assets/notfd.json';
+import animationData from '../assets/anim/notfd.json';
 import Lottie from "lottie-react";
 const Missing = () => {
 
@@ -13,17 +13,24 @@ const Missing = () => {
     };
 
     return (
-        <div className="center-item" style={{overflowX: "hidden"}}>
-        <article style={{ padding: "100px" }}>
-            <h1>Oops!</h1>
-            <p>Page Not Found</p>
-            <div className="flexGrow">
-                <Link to="/">Visit Our Homepage</Link>
-                <Lottie animationData={animationData} options={defaultOptions} height="50%" width="60%" />
-            </div>
-        </article>
+                <Link to="/">
+        <div style={{minWidth: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Lottie Animation */}
+            <Lottie
+                animationData={animationData}
+                options={defaultOptions}
+                height="auto"
+                width="100%"
+            />
+
+            {/* Content */}
+            {/*<div style={{ position: 'absolute', textAlign: 'center', color: 'white' }}>*/}
+            {/*    <h1>Oops!</h1>*/}
+            {/*    <p>Page Not Found</p>*/}
+            {/*</div>*/}
         </div>
-    )
-}
+        </Link>
+    );
+};
 
 export default Missing

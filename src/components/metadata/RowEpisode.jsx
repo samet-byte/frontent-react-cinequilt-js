@@ -1,18 +1,15 @@
 // Author: sametbayat
 // Dec 14, 2023 2:18 PM
 
-
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaPlayCircle } from 'react-icons/fa';
-import VideoEmbed from "../video/VideoEmbed";
-import OtherPlayer from "../video/OtherPlayer"; // Assuming you have an icon library, adjust this import accordingly
+import OtherPlayer from "../video/OtherPlayer";
 
 const RowEpisode = ({ episode, metadata }) => {
 
     const tooltip = (
-        <Tooltip id={`tooltip-${episode.episode}`} style={{ minWidth: '500px' }}>
+        <Tooltip key={episode.episode} id={`tooltip-${episode.episode}`}>
             {episode.description}
         </Tooltip>
     );
@@ -25,7 +22,9 @@ const RowEpisode = ({ episode, metadata }) => {
     }
 
     return (
-        <div className="card mb-3 justify-content-center" style={styles.card}>
+        <div className="card mb-3 justify-content-center"
+             // style={styles.card}
+        >
                     {/*<Link to={`/tv/${episode.id}`} style={{ textDecoration: 'none', justifyContent: 'center' }}>*/}
             <div className="row no-gutters">
                 <div className="col-md-8 d-flex align-items-center">
@@ -42,24 +41,15 @@ const RowEpisode = ({ episode, metadata }) => {
                         </OverlayTrigger>
                 </div>
             </div>
-                    {/*</Link>*/}
-                            {showVideo &&
-                                <OtherPlayer metadata={episode} />
-                                // <video
-                                //     src={episode.videoUrl}
-                                //     controls
-                                //     autoPlay
-                                //     style={{ width: '30%' }}
-                                // />
-                            }
+            {showVideo && <OtherPlayer metadata={episode} />}
         </div>
     );
 };
 
-const styles = {
+/*const styles = {
     card: {
         // maxWidth: '400px',
     },
-};
+};*/
 
 export default RowEpisode;

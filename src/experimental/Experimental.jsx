@@ -37,7 +37,7 @@ export const Experimental = () => {
        // />
        // </div>
        <>
-
+            <p>deneme</p>
          <OffCanvasFilter/>
 
        </>

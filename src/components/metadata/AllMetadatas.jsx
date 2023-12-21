@@ -1,17 +1,16 @@
-import {useState, useEffect, useCallback} from "react";
+import {useState, useEffect} from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import {useNavigate, useLocation, Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Search from "../composes/Search";
-import {FaEdit, FaEye, FaTrashAlt} from "react-icons/fa";
-import SearchOnGoogle from "../composes/SearchOnGoogle";
-import SearchTinyButton from "../composes/SearchTinyButton";
-import useAuth from "../../hooks/useAuth";
-import OffCanvasFilter from "../OffCanvasFilter";
-import {ShouldShow} from "../../common/ShouldShow";
-import {DeleteMetadataButton} from "../composes/DeleteMetadataButton";
-import Constants from "../../common/Constants";
 
-function SortView(sortBy, handleSortChange, sortOrder, contentType) {
+import OffCanvasFilter from "../OffCanvasFilter";
+
+import { Col, Row} from "react-bootstrap";
+import MovieCard from "../composes/common/MovieCard";
+import Loading from "../composes/Loading";
+
+function SortView(sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber) {
+
     return <OffCanvasFilter
         title={'Filter & Sort Content'}
         content={
@@ -22,7 +21,7 @@ function SortView(sortBy, handleSortChange, sortOrder, contentType) {
                         <select className="form-select" name="sortBy" value={sortBy} onChange={handleSortChange}>
                             <option value="title">Title</option>
                             <option value="director">Director</option>
-                            <option value="release_year">Release Year</option>
+                            <option value="releaseYear">Release Year</option>
                             <option value="duration">Duration</option>
                         </select>
                     </label>
@@ -46,9 +45,66 @@ function SortView(sortBy, handleSortChange, sortOrder, contentType) {
                         </select>
                     </label>
                 </div>
+                <div>
+                    <label className="form-label">
+                        Page Size:
+                        <input
+                            className="form-control"
+                            type="number"
+                            name="pageSize"
+                            min="1"
+                            max="100" //change
+                            value={pageSize}
+                            onChange={handleSortChange}
+                        ></input>
+                    </label>
+                </div>
+                <div>
+                    <label className="form-label">
+                        Page Number:
+                        <input
+                            className="form-control"
+                            type="number"
+                            name="pageNumber"
+                            min="1"
+                            max="100" //change
+                            value={pageNumber}
+                            onChange={handleSortChange}
+                        ></input>
+                    </label>
+                </div>
             </div>
         }
         />
+}
+
+function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas) {
+    return (
+        <div className="centered-container">
+            <Search
+                search={search}
+                setSearch={setSearch}
+            />
+
+
+            {SortView(sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber)}
+
+            <Row className="mt-4">
+                {filteredMetadatas.map((metadata, index) => (
+                    <Col key={metadata.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                        <MovieCard
+                            title={metadata.title?.trim()}
+                            posterUrl={metadata.posterUrl}
+                            releaseYear={metadata.releaseYear}
+                            mediaType={metadata.type}
+                            // linkTo={`/metadata-profile/${metadata.title}`}
+                        />
+                    </Col>
+                ))}
+            </Row>
+
+        </div>
+    );
 }
 
 const AllMetadatas = () => {
@@ -56,36 +112,42 @@ const AllMetadatas = () => {
 
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [search, setSearch] = useState("");
     const searchQueryCurrent = search.toLowerCase();
-    const { auth } = useAuth();
 
 
     const [sortBy, setSortBy] = useState(localStorage.getItem('sortBy') || 'title');
     const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
     const [contentType, setContentType] = useState(localStorage.getItem('contentType') || 'ANY')
 
+    const [pageSize, setPageSize] = useState(localStorage.getItem('pageSize') || 10);
+
+    const [pageNumber, setPageNumber] = useState(localStorage.getItem('pageNumber') || 1);
+
+    const [isProcessing, setIsProcessing] = useState(false);
+
     const handleSortChange = (event) => {
         const { name, value } = event.target;
 
         if (name === 'sortBy') {
-            setSortBy(value);
+            setSortBy(value)
             localStorage.setItem('sortBy', value);
         } else if (name === 'sortOrder') {
-            setSortOrder(value);
+            setSortOrder(value)
             localStorage.setItem('sortOrder', value);
         } else if (name === 'contentType'){
             setContentType(value)
             localStorage.setItem('contentType', value)
-            console.log(value)
+        } else if (name === 'pageSize'){
+            setPageSize(value)
+            localStorage.setItem('pageSize', value)
+        } else if (name === 'pageNumber'){
+            setPageNumber(value)
+            localStorage.setItem('pageNumber', value)
         }
+            console.log(value)
     };
-
-
-    // const actionsSize = 5e2;
-
 
     const handleRefresh = () => {
         navigate('/view-metadatas', { replace: true });
@@ -106,6 +168,7 @@ const AllMetadatas = () => {
                 handleRefresh();
             }
         };
+                // ?by=${sortBy}&order=${sortOrder}&val=${contentType}&col=type`
 
     }, [searchQueryCurrent])
 
@@ -113,13 +176,17 @@ const AllMetadatas = () => {
         let isMounted = true;
         const controller = new AbortController();
 
+        setIsProcessing(true);
+
         const getMetadatas = async () => {
             try {
-                const response = await axiosPrivate.get(`/metadatas?by=${sortBy}&order=${sortOrder}&val=${contentType}&col=type`, {
+                const response = await axiosPrivate.get(`/metadatas/search/list?sortBy=${sortBy}&sortDirection=${sortOrder}&type=${contentType}&pageSize=${pageSize}&pageNumber=${pageNumber}`
+                    , {
                     signal: controller.signal
                 });
                 console.log('Data fetched successfully');
-                isMounted && setMetadatas(response.data);
+                console.log(response.data);
+                isMounted && setMetadatas(response.data.content);
             } catch (err) {
                 console.log(err);
                 /*if (err.name !== 'CanceledError') { // Ignore canceled requests, without this 'return' statement, called immediately
@@ -128,6 +195,8 @@ const AllMetadatas = () => {
                         : alert(err.name + ' -> ' + err.message);
                     navigate('/login', { state: { from: location }, replace: true });
                 }*/
+            } finally {
+                setIsProcessing(false);
             }
         }
 
@@ -137,7 +206,7 @@ const AllMetadatas = () => {
             isMounted = false;
             controller.abort();
         }
-    }, [sortOrder, sortBy, contentType])
+    }, [sortOrder, sortBy, contentType, pageSize, pageNumber])
 
     //responseText
 
@@ -148,60 +217,10 @@ const AllMetadatas = () => {
     );
 
     return (
-        <div className="centered-container">
-            <Search
-                search={search}
-                setSearch={setSearch}
-            />
-
-
-
-            <table  className='table table-responsive table-bordered table-hover shadow'>
-                <thead>
-                <tr className='text-center'>
-                    <th colSpan={2}>{SortView(sortBy, handleSortChange, sortOrder, contentType)}</th>
-                    <th>Title</th>
-                    <th>Director</th>
-                    <th>Release Year</th>
-                    <th>Duration</th>
-                    <th>Genre</th>
-                    <th>Type</th>
-                    {/*<th colSpan={actionsSize}>Actions</th>*/}
-                </tr>
-                </thead>
-
-                <tbody className="text-center">
-                {filteredMetadatas.map((metadata, index) => (
-
-                // <Link to={`/metadata-profile/${metadata.title}`} className="btn btn-info">
-                    <tr key={metadata.id}>
-                        <th scope="row" key={index}>{metadata.id}</th>
-                        <Link to={`/metadata-profile/${metadata.title}`} className="btn btn-info">
-                            <td>
-                                <img
-                                    width={270 / 2}
-                                    height={370 / 2}
-                                    src={metadata.posterUrl}
-                                    alt={metadata.title}
-                                    loading={'lazy'}
-                                />
-                            </td>
-                        </Link>
-
-                        <td>{metadata.title}</td>
-                        <td>{metadata.director}</td>
-                        <td>{metadata.releaseYear}</td>
-                        <td>{metadata.duration}</td>
-                        <td>{metadata.genre}</td>
-                        <td>{metadata.type}</td>
-
-
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
-    );
+        !isProcessing ?
+        ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas)
+            : <Loading anim={'m1'} size={'100px'}/>
+    )
 
 };
 

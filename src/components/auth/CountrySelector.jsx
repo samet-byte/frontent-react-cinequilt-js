@@ -2,7 +2,6 @@ import React from 'react';
 import Select from 'react-select';
 
 const CountrySelector = ({ selectedCountry, onChange }) => {
-    // You can replace this array with a list of countries from an API or a data file
     const countryOptions = [
         { value: 'tur', label: 'Türkiye' },
         { value: 'us', label: 'United States' },
@@ -47,13 +46,12 @@ const CountrySelector = ({ selectedCountry, onChange }) => {
                 }),
                 option: (provided, state) => ({
                     ...provided,
-                    // color: '#000000cc', // Adjust the colors as needed
                     color: state.isSelected ? '#000000' : '#000000cc',
-                    // color: state.isSelected ? '#000000' : '#ffffff', // Adjust the colors as needed
-                    backgroundColor: state.isSelected ? '#ffffff' : 'transparent', // Adjust the background color when selected
+                    // color: state.isSelected ? '#000000' : '#ffffff',
+                    backgroundColor: state.isSelected ? '#ffffff' : 'transparent',
                     '&:hover': {
-                        color: '#ffffff', // Change the color on hover
-                        backgroundColor: '#656565', // Change the background color on hover
+                        color: '#ffffff',
+                        backgroundColor: '#656565',
                     },
                 }),
             }}

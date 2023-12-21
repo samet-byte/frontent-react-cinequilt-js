@@ -4,6 +4,7 @@ import useRefreshToken from '../hooks/useRefreshToken';
 import useAuth from '../hooks/useAuth';
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Cookies from 'js-cookie';
+import Loading from "./composes/Loading";
 const PersistLogin = () => {
 
     const saveRefreshTokenToLocalStorage = (refreshToken) => {
@@ -65,7 +66,8 @@ const PersistLogin = () => {
             {!persist
                 ? <Outlet />
                 : isLoading
-                    ? <p>Loading...</p>
+                ? <Loading anim="w" />
+                    // ? <p>Loading...</p>
                     : <Outlet />
             }
         </>
