@@ -75,12 +75,6 @@ function PublicRoutes() {
 function AllRoutes() {
     return <Routes>
         <Route path={Paths.HOME} element={<Layout/>}>
-            {/*/!* public routes *!/*/}
-            {/*<Route path={Paths.LOGIN} element={<Login/>}/>*/}
-            {/*<Route path={Paths.REGISTER} element={<Register/>}/>*/}
-            {/*<Route path={Paths.LINK_PAGE} element={<LinkPage/>}/>*/}
-            {/*<Route path={Paths.UNAUTHORIZED} element={<Unauthorized/>}/>*/}
-            {/*<Route path={Paths.SERVICE_UNAVAILABLE} element={<ServiceUnavailable/>}/>*/}
 
             <Route element={<PersistLogin/>}>
 
@@ -107,12 +101,6 @@ function AllRoutes() {
                     allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
                     <Route exact path={`${Paths.METADATA_PROFILE_ID}`} element={<ProfileMetadata/>}></Route>
                 </Route>
-
-                {/*<Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>*/}
-                {/*<Route exact path={`${Paths.TV_SHOW}${Paths.WITH.TITLE}`} element={<ProfileMetadata />}></Route>*/}
-                {/*</Route>*/}
-                {/*<Route exact path={"/tv/:title"} element={<ProfileMetadata />}></Route>*/}
-                {/*<Route exact path="/tv/:title/:season/:episode" element={<ProfileEpisode />}></Route>*/}
 
                 <Route element={<RequireAuth
                     allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
@@ -172,20 +160,7 @@ function AllRoutes() {
 function App() {
     return (
         <>
-            {/*<div className="navbar-content">*/}
-            {/*    <NavBarConditional/>*/}
-            {/*</div>*/}
             <NavBarConditional/>
-            {/*<div>*/}
-
-            {/*    <div>*/}
-            {/*        <BackgroundImage>*/}
-            {/*            {AllRoutes()}*/}
-            {/*        </BackgroundImage>*/}
-
-            {/*    </div>*/}
-            {/*</div>*/}
-
         </>
 
     );
