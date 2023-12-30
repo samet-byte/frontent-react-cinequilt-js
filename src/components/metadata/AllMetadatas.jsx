@@ -2,83 +2,13 @@ import {useState, useEffect} from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import {useNavigate} from "react-router-dom";
 import Search from "../composes/Search";
-
-import OffCanvasFilter from "../OffCanvasFilter";
-
 import { Col, Row} from "react-bootstrap";
 import MovieCard from "../composes/common/MovieCard";
-import Loading from "../composes/Loading";
+import {SortView} from "../composes/SortView";
+import '../../experimental/x.css'
+import Paths from "../../common/Paths";
 
-function SortView(sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber) {
-
-    return <OffCanvasFilter
-        title={'Filter & Sort Content'}
-        content={
-            <div className="container mt-4">
-                <div>
-                    <label className="form-label">
-                        Sort By:
-                        <select className="form-select" name="sortBy" value={sortBy} onChange={handleSortChange}>
-                            <option value="title">Title</option>
-                            <option value="director">Director</option>
-                            <option value="releaseYear">Release Year</option>
-                            <option value="duration">Duration</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label className="form-label">
-                        Sort Order:
-                        <select className="form-select" name="sortOrder" value={sortOrder} onChange={handleSortChange}>
-                            <option value="asc">Ascending</option>
-                            <option value="desc">Descending</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label className="form-label">
-                        Content Type:
-                        <select className="form-select" name="contentType" value={contentType} onChange={handleSortChange}>
-                            <option value="MOVIE">Movie</option>
-                            <option value="TV_SHOW">TV Show</option>
-                            <option value="ANY">Any</option>
-                        </select>
-                    </label>
-                </div>
-                <div>
-                    <label className="form-label">
-                        Page Size:
-                        <input
-                            className="form-control"
-                            type="number"
-                            name="pageSize"
-                            min="1"
-                            max="100" //change
-                            value={pageSize}
-                            onChange={handleSortChange}
-                        ></input>
-                    </label>
-                </div>
-                <div>
-                    <label className="form-label">
-                        Page Number:
-                        <input
-                            className="form-control"
-                            type="number"
-                            name="pageNumber"
-                            min="1"
-                            max="100" //change
-                            value={pageNumber}
-                            onChange={handleSortChange}
-                        ></input>
-                    </label>
-                </div>
-            </div>
-        }
-        />
-}
-
-function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas) {
+function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages) {
     return (
         <div className="centered-container">
             <Search
@@ -90,42 +20,71 @@ function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrd
             {SortView(sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber)}
 
             <Row className="mt-4">
-                {filteredMetadatas.map((metadata, index) => (
-                    <Col key={metadata.id} xs={12} sm={6} md={4} lg={3} className="mb-4">
+                {filteredMetadatas.map((metadata) => (
+                    <Col key={metadata.id} xs={12} sm={6} md={4} lg={3} className="mb-4 d-flex justify-content-center align-items-center">
                         <MovieCard
                             title={metadata.title?.trim()}
                             posterUrl={metadata.posterUrl}
                             releaseYear={metadata.releaseYear}
                             mediaType={metadata.type}
-                            // linkTo={`/metadata-profile/${metadata.title}`}
+                            linkTo={`${Paths.METADATA_PROFILE}/${(metadata.id)}`}
                         />
                     </Col>
                 ))}
             </Row>
 
+            {/*<div className="d-flex justify-content-center align-items-center mt-3">*/}
+            <div className="d-flex justify-content-center align-items-center mt-3">
+                <Row>
+                    <Col className="text-start">
+                        <button
+                            className="btn btn-primary"
+                            onClick={handlePrevPage}
+                            disabled={pageNumber === 1}
+                        >
+                            {'<'}
+                        </button>
+                    </Col>
+                    <Col className="text-center">
+                        <button className="btn btn-primary">
+                            {pageNumber}/{totalPages}
+                        </button>
+                    </Col>
+                    <Col className="text-end">
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleNextPage}
+                            disabled={pageNumber === totalPages}
+                        >
+                            {'>'}
+                        </button>
+                    </Col>
+                </Row>
+            </div>
+
+
+
         </div>
     );
 }
 
+// View all of them
 const AllMetadatas = () => {
     const [metadatas, setMetadatas] = useState([]);
-
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
-
     const [search, setSearch] = useState("");
     const searchQueryCurrent = search.toLowerCase();
-
-
     const [sortBy, setSortBy] = useState(localStorage.getItem('sortBy') || 'title');
     const [sortOrder, setSortOrder] = useState(localStorage.getItem('sortOrder') || 'asc');
     const [contentType, setContentType] = useState(localStorage.getItem('contentType') || 'ANY')
-
     const [pageSize, setPageSize] = useState(localStorage.getItem('pageSize') || 10);
-
     const [pageNumber, setPageNumber] = useState(localStorage.getItem('pageNumber') || 1);
+    const [totalPages, setTotalPages] = useState(999);
 
-    const [isProcessing, setIsProcessing] = useState(false);
+    const handlePrevPage = () => { setPageNumber(Number(pageNumber) - 1); }
+
+    const handleNextPage = () => { setPageNumber(Number(pageNumber) + 1); }
 
     const handleSortChange = (event) => {
         const { name, value } = event.target;
@@ -150,33 +109,19 @@ const AllMetadatas = () => {
     };
 
     const handleRefresh = () => {
-        navigate('/view-metadatas', { replace: true });
+        navigate(`${Paths.VIEW_METADATAS}`, { replace: true });
     }
 
     useEffect(() => {
         handleRefresh();
     }, []);
 
-    useEffect(() => {
-
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape') {
-                searchQueryCurrent('');
-            }
-            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'r') {
-                // Call the handleRefresh function
-                handleRefresh();
-            }
-        };
-                // ?by=${sortBy}&order=${sortOrder}&val=${contentType}&col=type`
-
-    }, [searchQueryCurrent])
 
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
 
-        setIsProcessing(true);
+        // setIsProcessing(true);
 
         const getMetadatas = async () => {
             try {
@@ -184,11 +129,13 @@ const AllMetadatas = () => {
                     , {
                     signal: controller.signal
                 });
-                console.log('Data fetched successfully');
-                console.log(response.data);
+                // console.log('Data fetched successfully');
+                // console.log(response.data);
+                setTotalPages(response.data.totalPages)
                 isMounted && setMetadatas(response.data.content);
             } catch (err) {
                 console.log(err);
+                //todo: uncomment
                 /*if (err.name !== 'CanceledError') { // Ignore canceled requests, without this 'return' statement, called immediately
                     err.response?.status === 403
                         ? alert(err.name + ' -> Unauthorized or Access Token Expired')
@@ -196,7 +143,7 @@ const AllMetadatas = () => {
                     navigate('/login', { state: { from: location }, replace: true });
                 }*/
             } finally {
-                setIsProcessing(false);
+                // setIsProcessing(false);
             }
         }
 
@@ -206,7 +153,7 @@ const AllMetadatas = () => {
             isMounted = false;
             controller.abort();
         }
-    }, [sortOrder, sortBy, contentType, pageSize, pageNumber])
+    }, [sortOrder, sortBy, contentType, pageSize, pageNumber, axiosPrivate])
 
     //responseText
 
@@ -217,9 +164,11 @@ const AllMetadatas = () => {
     );
 
     return (
-        !isProcessing ?
-        ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas)
-            : <Loading anim={'m1'} size={'100px'}/>
+        // !isProcessing ?
+        <div >
+            {ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages)}
+        </div>
+            // : <Loading anim={'m1'} size={'100px'}/>
     )
 
 };

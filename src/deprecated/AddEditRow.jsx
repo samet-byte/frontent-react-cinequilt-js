@@ -10,12 +10,6 @@ const AddEditRow = ({
                            handleInputChange,
                            isRequired = false,
                        }) => {
-    // const [title, setTitle] = useState(inputValue || '');
-    //
-    // // const handleInputChange = (e) => {
-    // //     setTitle(e.target.value);
-    // //     onInputChange && onInputChange(e.target.value);
-    // // };
 
     return (
         <div className='input-group mb-5'>

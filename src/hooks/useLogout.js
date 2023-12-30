@@ -5,7 +5,6 @@ import useUserStuff from "./useUserStuff";
 
 const useLogout = () => {
     const { setAuth, auth } = useAuth();
-
     const { clearUserStuff } = useUserStuff();
 
     return async () => {
@@ -15,9 +14,7 @@ const useLogout = () => {
         clearUserStuff();
         Cookies.remove('refreshToken');
         localStorage.removeItem('refreshToken');
-        if (localStorage.getItem('persist') === 'false') {
-            localStorage.removeItem('username');
-        }
+
         try {
             // const response =
                 await axios('/auth/logout', {
@@ -31,9 +28,6 @@ const useLogout = () => {
         } catch (err) {
             console.error(err);
         }
-
-        // logout();
-
     };
 }
 

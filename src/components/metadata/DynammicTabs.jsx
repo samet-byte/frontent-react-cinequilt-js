@@ -7,14 +7,12 @@ import {axiosPrivate} from "../../api/axios";
 import RowEpisode from "./RowEpisode";
 import Loading from "../composes/Loading";
 
+// get only 1 season content
+// sezona göre bölümleri getirir
 const DynamicTabsSeasons = ({ metadata, tabCount }) => {
-
     const tabsArray = Array.from({ length: tabCount }, (_, index) => index + 1);
-
     const [episodes, setEpisodes] = useState([]);
-
     const [isLoaded, setIsLoaded] = useState(false);
-
     const [selectedSeason, setSelectedSeason] = useState(1);
 
     useEffect(() => {
@@ -24,7 +22,7 @@ const DynamicTabsSeasons = ({ metadata, tabCount }) => {
 
         const getInfo = async () => {
             try {
-                const response = await axiosPrivate.get(`/tvshow/season/${metadata.id}/${selectedSeason}`, {
+                const response = await axiosPrivate.get(`/series/episode/season/${metadata.id}/${selectedSeason}`, {
                     signal: controller.signal
                 });
                 console.log(response.data);
@@ -38,7 +36,6 @@ const DynamicTabsSeasons = ({ metadata, tabCount }) => {
         };
 
         getInfo();
-
 
         return () => {
             isMounted = false;
@@ -85,7 +82,6 @@ const DynamicTabsSeasons = ({ metadata, tabCount }) => {
             <div>Loading or Error Handling...</div>
         )
     );
-
 };
 
 export default DynamicTabsSeasons;

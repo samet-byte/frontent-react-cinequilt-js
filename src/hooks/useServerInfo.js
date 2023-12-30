@@ -5,10 +5,8 @@ import { useState, useEffect } from 'react';
 import {axiosPrivate} from "../api/axios";
 
 const useServerInfo = () => {
-    // const [serverInfo, setServerInfo] = useState(null);
 
     const [serverIP, setServerIP] = useState('');
-
 
     useEffect(() => {
             const controller = new AbortController();
@@ -19,9 +17,7 @@ const useServerInfo = () => {
                         signal: controller.signal
                     });
                     setServerIP(response.data);
-                } catch (err) {
-                    console.error(err);
-                }
+                } catch (err) {}
             }
 
             getIpInfo();

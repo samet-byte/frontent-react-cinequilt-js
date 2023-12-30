@@ -1,7 +1,6 @@
 // Author: sametbayat
 // Dec 17, 2023 5:02 PM
 
-
 import React, {useState} from 'react';
 import {axiosPrivate} from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
@@ -9,13 +8,11 @@ import {FaTrashAlt} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import Lottie from "lottie-react";
 import animationData from "../../assets/anim/delete.json";
+import Paths from "../../common/Paths";
 
 export function DeleteMetadataButton({handleRefresh, id}) {
-
-
     const {auth} = useAuth();
     const navigate = useNavigate();
-
     const [isProcessStarted, setIsProcessStarted] = useState(false);
 
     const handleDelete = async (id) => {
@@ -32,16 +29,12 @@ export function DeleteMetadataButton({handleRefresh, id}) {
                 withCredentials: true
             });
 
-            // setMetadatas(metadatas.filter((metadata) => metadata.id !== id));
-            // navigate("/view-metadatas", { replace: true });
         } catch (error) {
-            // Handle the error appropriately, e.g., log it or show a user-friendly message
             console.error('Error saving metadata:', error);
         } finally {
-            // handleRefresh();
             setIsProcessStarted(false)
             handleRefresh && handleRefresh();
-            navigate("/view-metadatas");
+            navigate(`${Paths.VIEW_METADATAS}`, {replace: true});
         }
     };
 
@@ -50,7 +43,6 @@ export function DeleteMetadataButton({handleRefresh, id}) {
             className="btn btn-outline-danger"
             onClick={() => {
                 handleDelete(id)
-                // navigate("/view-metadatas", { replace: true })
             }}
         >
             {!isProcessStarted ?

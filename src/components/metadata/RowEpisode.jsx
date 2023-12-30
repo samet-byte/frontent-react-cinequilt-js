@@ -4,7 +4,7 @@
 import React, {useState} from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaPlayCircle } from 'react-icons/fa';
-import OtherPlayer from "../video/OtherPlayer";
+import CustomPlayer from "../video/CustomPlayer";
 
 const RowEpisode = ({ episode, metadata }) => {
 
@@ -14,7 +14,6 @@ const RowEpisode = ({ episode, metadata }) => {
         </Tooltip>
     );
 
-
     const [showVideo, setShowVideo] = useState(false);
     const handlePlayClick = () => {
         console.log("handlePlayClick");
@@ -22,10 +21,7 @@ const RowEpisode = ({ episode, metadata }) => {
     }
 
     return (
-        <div className="card mb-3 justify-content-center"
-             // style={styles.card}
-        >
-                    {/*<Link to={`/tv/${episode.id}`} style={{ textDecoration: 'none', justifyContent: 'center' }}>*/}
+        <div className="card mb-3 justify-content-center">
             <div className="row no-gutters">
                 <div className="col-md-8 d-flex align-items-center">
                         <OverlayTrigger overlay={tooltip} placement={'auto'}>
@@ -41,7 +37,7 @@ const RowEpisode = ({ episode, metadata }) => {
                         </OverlayTrigger>
                 </div>
             </div>
-            {showVideo && <OtherPlayer metadata={episode} />}
+            {showVideo && <CustomPlayer metadata={episode} />}
         </div>
     );
 };

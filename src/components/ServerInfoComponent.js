@@ -15,10 +15,13 @@ const ServerInfoComponent = () => {
         (ip !== '' && ip !== undefined && ip !== null) ?
         <>
             <br/>
-            <p>Scan this QR code to access the server from your phone</p>
-            <p>IP Address: {finalIP}</p>
+            <p>Scan the QR code <br/>to access the server <br/>from your phone</p>
+            <p>
+                {/*IP Address: */}
+                {finalIP}
+            </p>
             <QRCode
-                // value is ip address of the server
+                style={{borderRadius: "10px"}}
                 size={200}
                 bgColor="transparent"
                 fgColor="black"

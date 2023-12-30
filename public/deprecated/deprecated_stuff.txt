@@ -356,3 +356,1439 @@ const [userInfo, setUserInfo] = useState(null);
 
 
 
+                                                   // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("userId")) || null);
+                                                       // const [username, setUsername] = useState(JSON.parse(localStorage.getItem("username") || null));
+                                                       // const [email, setEmail] = useState(JSON.parse(localStorage.getItem("email") || null));
+                                                       // const [country, setCountry] = useState(JSON.parse(localStorage.getItem("country") || null));
+                                                               // userId, setUserId,
+                                                               // username, setUsername,
+                                                               // email, setEmail,
+                                                               // country, setCountry
+
+
+
+    const refreshTokenLocal = localStorage.getItem('refreshToken');
+
+
+    // console.log('refreshTokenLocal: ' + refreshTokenLocal)
+
+    // Now you can use the refreshToken as needed
+    // console.log('Refresh Token:', refreshToken);
+
+    // console.log(`auth: ${JSON.stringify(auth)}`)
+
+    // console.log("ref js-cook: " + Cookies.get('refreshToken'))
+
+    // const [serverInfo, setServerInfo] = useState(null);
+
+// if (localStorage.getItem('persist') === 'false') {
+        //     localStorage.removeItem('username');
+        // }
+
+
+
+// import { useState, useEffect } from "react";
+// import useAxiosPrivate from "../hooks/useAxiosPrivate";
+// import { useNavigate, useLocation } from "react-router-dom";
+// import {Table} from "react-bootstrap";
+// import MakeAdminBox from "./composes/MakeAdminBox";
+// import useLoading from "../hooks/useLoading";
+//
+// const Users = () => {
+//     const [users, setUsers] = useState();
+//     const axiosPrivate = useAxiosPrivate();
+//     const navigate = useNavigate();
+//     const location = useLocation();
+//     const { isLoading, startLoading, stopLoading } = useLoading();
+//
+//
+//     useEffect(() => {
+//         let isMounted = true;
+//         const controller = new AbortController();
+//
+//         const getUsers = async () => {
+//             try {
+//                 const response = await axiosPrivate.get('/users/all', {
+//                     signal: controller.signal
+//                 });
+//                 console.log(response.data);
+//                 isMounted && setUsers(response.data);
+//             } catch (err) {
+//                 console.log(err);
+//                 if (err.name !== 'CanceledError') { // Ignore canceled requests, without this 'return' statement, called immediately
+//                     err.response?.status === 403
+//                         ? alert(err.name + ' -> Unauthorized or Access Token Expired')
+//                         : alert(err.name + ' -> ' + err.message);
+//                     navigate('/login', { state: { from: location }, replace: true });
+//                 }
+//             } finally {
+//             }
+//         }
+//
+//         getUsers();
+//
+//         return () => {
+//             isMounted = false;
+//             controller.abort();
+//         }
+//     }, [])
+//
+//
+//     const makeAdmin = async (userToModify) => {
+//         try {
+//             const response = await axiosPrivate.patch(`/users/make-admin/${userToModify?.username}`,
+//                 {},
+//                 {
+//
+//                 }
+//
+//             );
+//             console.log(response.data);
+//             setUsers(response.data);
+//             navigate(0)
+//         } catch (err) {
+//             // ... (same error handling as before)
+//         } finally {
+//         }
+//     }
+//
+//     return (
+//         <article>
+//             <h2>Users List</h2>
+//             {users?.length ? (
+//                 <Table striped bordered hover>
+//                     <thead>
+//                     <tr>
+//                         <th>Username</th>
+//                         <th>Role</th>
+//                         <th>Action</th>
+//                     </tr>
+//                     </thead>
+//                     <tbody>
+//                     {users.map((user, i) => (
+//                         <tr key={i}>
+//                             <td>{user?.username}</td>
+//                             <td>{user?.role}</td>
+//                             <td>
+//                                 {/* Use the new component here */}
+//                                 <MakeAdminBox user={user} onChange={makeAdmin} />
+//                             </td>
+//                         </tr>
+//                     ))}
+//                     </tbody>
+//                 </Table>
+//             ) : (
+//                 <p>No users to display</p>
+//             )}
+//         </article>
+//
+//     );
+// };
+//
+// export default Users;
+
+
+
+
+
+
+
+
+//settings
+
+// Author: sametbayat
+// Dec 21, 2023 12:43 PM
+
+
+import React, {useEffect, useState} from 'react';
+import CountrySelector from "./auth/CountrySelector";
+import useUserStuff from "../hooks/useUserStuff";
+import {Badge, Form} from "react-bootstrap";
+import axios, {axiosPrivate} from "../api/axios";
+import useAuth from "../hooks/useAuth";
+import Constants from "../common/Constants";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck, faInfoCircle, faTimes} from "@fortawesome/free-solid-svg-icons";
+import useLoading from "../hooks/useLoading";
+import Loading from "./composes/Loading";
+
+
+function Settings() {
+
+    const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+    const [currentPwd, setCurrentPwd] = useState(null);
+    // const [currentPwdFocus, setCurrentPwdFocus] = useState(false);
+    // const [validCurrentPwd, setValidCurrentPwd] = useState(false);
+
+    const [pwd, setPwd] = useState(null);
+    // const [validPwd, setValidPwd] = useState(false);
+    // const [pwdFocus, setPwdFocus] = useState(false);
+
+    const [matchPwd, setMatchPwd] = useState(null);
+    // const [validMatch, setValidMatch] = useState(false);
+    // const [matchFocus, setMatchFocus] = useState(false);
+
+    // const disabled = !validPwd || !validMatch;
+
+    const { isLoading, startLoading, stopLoading } = useLoading();
+
+
+    const [errMsg, setErrMsg] = useState('');
+
+
+    const [showChangePwd, setShowChangePwd] = useState(false);
+
+
+    // useEffect(() => {
+    //     setValidPwd(PWD_REGEX.test(pwd));
+    //     setValidMatch(pwd === matchPwd);
+    //     setValidCurrentPwd(PWD_REGEX.test(currentPwd));
+    // }, [pwd, matchPwd, currentPwd])
+
+
+    useEffect(() => {
+        setErrMsg('');
+    }, [pwd, matchPwd])
+
+    // const buttonStyle = {
+    //     backgroundColor: disabled ? '#999999' : '#FFD700', // Change color when activated
+    //     cursor: disabled ? 'not-allowed' : 'pointer', // Change cursor when activated
+    // };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+
+
+        // if button enabled with JS hack
+        const v2 = PWD_REGEX.test(pwd);
+        if (!v2) {
+            setErrMsg("Invalid Entry");
+            return;
+        }
+
+
+        startLoading()
+
+        try {
+
+            console.log(
+                JSON.stringify({
+                    currentPassword: currentPwd,
+                    newPassword: pwd,
+                    confirmationPassword: matchPwd
+                })
+            )
+
+            const response = await axios.patch('/users/change/password',
+                JSON.stringify({
+                    currentPassword: currentPwd,
+                    newPassword: pwd,
+                    confirmationPassword: matchPwd
+                }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${auth?.accessToken}`
+                    },
+                    withCredentials: true
+                }
+            );
+
+            alert("Password Changed Successfully!");
+
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg('No Server Response');
+            } else if (err.response?.status === 409) {
+                setErrMsg('Username Taken');
+            } else {
+                setErrMsg('Registration Failed')
+            }
+        } finally {
+            stopLoading()
+        }
+    }
+
+
+    const {userStuff, updateUserStuff} = useUserStuff();
+    const [selectedCountry, setSelectedCountry] = useState(userStuff?.country.value || '');
+
+    const { auth } = useAuth();
+
+    const handleCountryChange = (selectedOption) => {
+        setSelectedCountry(selectedOption);
+    };
+
+    const changeCountryApi = async () => {
+        try {
+            startLoading()
+            const response = await axiosPrivate.patch(
+                `users/change/${selectedCountry.value}`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${auth?.accessToken}`
+                    },
+                    withCredentials: true
+                }
+            );
+
+                if (response.status === 200) {
+                    updateUserStuff({
+                        userId: userStuff?.userId,
+                        username: userStuff?.username,
+                        email: userStuff?.email,
+                        country: {value: selectedCountry.value, label: selectedCountry.label},
+                        roles: userStuff?.roles
+                    })
+                    alert(`Country Changed Successfully to ${selectedCountry.label}`)
+                    window.location.reload();
+
+                } else {
+                    alert('What tha\' heck just happened? :(')
+                }
+
+            console.log(response);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            stopLoading()
+        }
+    };
+
+    useEffect(() => {
+        if (selectedCountry === null || selectedCountry === undefined || selectedCountry === '') return;
+        changeCountryApi();
+    }, [selectedCountry]);
+
+    const pHorizontal = 200;
+
+    return (
+        <div style={{paddingLeft: pHorizontal, paddingRight: pHorizontal }}>
+            <Form onSubmit={handleSubmit}>
+            <Form.Group className="ml-10 mr-10">
+                <Form.Label>
+                    Change Region
+                </Form.Label>
+                <CountrySelector
+                    selectedCountry={selectedCountry}
+                    onChange={handleCountryChange}
+                />
+            </Form.Group>
+
+
+            { showChangePwd ?
+                <Form>
+                    <Form.Group controlId="cpassword">
+                        <Form.Label column sm="3">
+                            Current Password
+                        </Form.Label>
+
+                        <Form.Control
+                            type="password"
+                            name="cpassword"
+                            value={currentPwd}
+                            onChange={(e) => setCurrentPwd(e.target.value)}
+                            className="form-control col-span-small-6 mb-3 input-black-border"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="password">
+                        <Form.Label column sm="3">
+                            New Password
+                        </Form.Label>
+
+                        <Form.Control
+                            type="password"
+                            name="password"
+                            value={pwd}
+                            onChange={(e) => setPwd(e.target.value)}
+                            className="form-control col-span-small-6 mb-3 input-black-border"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="checkpassword">
+                        <Form.Label column sm="3">
+                            Re-enter New Password
+                        </Form.Label>
+
+                        <Form.Control
+                            type="password"
+                            name="checkpassword"
+                            value={matchPwd}
+                            onChange={(e) => setMatchPwd(e.target.value)}
+                            className="form-control col-span-small-6 mb-3 input-black-border"
+                        />
+                    </Form.Group>
+
+                    <button
+                        className="btn btn-info"
+                        // disabled={ !validPwd || !validMatch || !validCurrentPwd}
+                        // style={buttonStyle}
+                        onClick={handleSubmit}
+                    >
+                        Change Password
+                    </button>
+
+                </Form>
+                :
+                <button
+                    className="btn btn-info"
+                    // disabled={ !validPwd || !validMatch || !selectedCountry}
+                    // style={buttonStyle}
+                    onClick={() => setShowChangePwd(true)}
+                >
+                    ReKnit My Quilt ( Change Password )
+                </button>
+            }
+        </Form>
+    </div>
+
+    );
+}
+
+export default Settings;
+
+
+
+
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Lottie from 'lottie-react';
+import errorAnimation from '../../assets/anim/errorLottie.json';
+import {useParams} from "react-router-dom"; // Replace with the actual path to your Lottie animation JSON file
+
+
+const M3UList = () => {
+  // const {endpoint} = useParams();
+  // if (endpoint === undefined || endpoint === null || endpoint === '') {
+  // const  endpoint = localStorage.getItem('DLNA') || useParams() || '';
+
+
+  let endpoint = localStorage.getItem('DLNA');
+  const params = useParams();
+
+  if (!endpoint) {
+    endpoint = params ? params.endpoint : ''; // Adjust to match your actual parameter name
+  }
+
+
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const parseM3UPlaylist = (playlistString) => {
+
+    console.log(playlistString)
+    const lines = playlistString.split('\n');
+    const playlistData = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+
+      if (line.startsWith('#EXTINF')) {
+        const info = line.split(',');
+        const title = info[1];
+        const url = lines[i + 1].trim();
+        playlistData.push({ title, url });
+      }
+    }
+
+    return playlistData;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/${encodeURIComponent(endpoint)}`);
+        // const response = fetch(`http://localhost:3001/${encodeURIComponent(endpoint)}`)
+        //     .then(response => {
+        //       console.log(response)
+        //       response.json()
+        //     })
+        //     .then(data => console.log(data))
+        //     .catch(error => console.error('Error:', error));
+        // console.log(response.data)
+        const parsedData = parseM3UPlaylist(response.data);
+        setData(parsedData);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    fetchData();
+  }, [endpoint]); // Re-run effect when endpoint changes
+
+  if (error) {
+    return (
+        <div>
+          <h3>Error: {error.message}</h3>
+          <Lottie animationData={errorAnimation} height={100} width={100} />
+        </div>
+    );
+  }
+
+  const filteredData = data.filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const pastelColors = [
+    '#FFD1DC', // pastel pink
+    '#FFECB3', // pastel yellow
+    '#B2DFDB', // pastel green
+    '#C9D6EA', // pastel blue
+    '#FFD180', // pastel orange
+    '#FFB6C1', // pastel pink (lighter shade)
+    '#FFFACD', // pastel yellow (lighter shade)
+    '#98FB98', // pastel green (lighter shade)
+    '#ADD8E6', // pastel blue (lighter shade)
+    '#FFCC80', // pastel orange (lighter shade)
+    '#FF69B4', // pastel pink (darker shade)
+    '#FFD700', // pastel yellow (darker shade)
+    '#32CD32', // pastel green (darker shade)
+    '#87CEEB', // pastel blue (darker shade)
+    '#FF8C00', // pastel orange (darker shade)
+    // Add more pastel colors as needed
+  ];
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      setSearchTerm('');
+    }
+  };
+
+  return (
+      <div
+          className="container text-center"
+          style={{ fontSize: '20px' }}
+          onKeyDown={handleKeyDown}
+      >
+        <div className="row">
+          <div className="col-12">
+            <h1 className="text-center">M3U Playlist</h1>
+            <input
+                className="form-control text-center"
+                type="text"
+                placeholder="🔍 Search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+            />
+            <br/>
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+              {filteredData.map((item, index) => (
+                  <div key={item.url} className="col mb-4" style={{ height: '100%' }}>
+                    <div
+                        className="card"
+                        style={{
+                          // backgroundColor: generateRandomColor(),
+                          backgroundColor: pastelColors[index % pastelColors.length],
+                          height: '50', // Set a fixed height for the card
+                        }}
+                    >
+                      <div className="card-body">
+                        <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: 'none', color: 'black' }}
+                        >
+                          <h5 className="card-title">{item.title}</h5>
+                          {/*<video src={item.url} width="320" height="240" controls/>*/}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+  );
+
+
+
+};
+
+export default M3UList;
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import Lottie from 'lottie-react';
+// import errorAnimation from '../../assets/anim/errorLottie.json';
+// import {useParams} from "react-router-dom";
+// import Constants from "../../common/Constants";
+//
+//
+// const M3UList = () => {
+//
+//   let endpoint = localStorage.getItem('DLNA');
+//   const params = useParams();
+//
+//   if (!endpoint) {
+//     endpoint = params ? params.endpoint : '';
+//   }
+//
+//   const [data, setData] = useState([]);
+//   const [error, setError] = useState(null);
+//   const [searchTerm, setSearchTerm] = useState('');
+//
+//   const parseM3UPlaylist = (playlistString) => {
+//
+//     console.log(playlistString)
+//     const lines = playlistString.split('\n');
+//     const playlistData = [];
+//
+//     for (let i = 0; i < lines.length; i++) {
+//       const line = lines[i].trim();
+//
+//       if (line.startsWith('#EXTINF')) {
+//         const info = line.split(',');
+//         const title = info[1];
+//         const url = lines[i + 1].trim();
+//         playlistData.push({ title, url });
+//       }
+//     }
+//
+//     return playlistData;
+//   };
+//
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:3001/${encodeURIComponent(endpoint)}`);
+//         const parsedData = parseM3UPlaylist(response.data);
+//         setData(parsedData);
+//       } catch (error) {
+//         setError(error);
+//       }
+//     };
+//
+//     fetchData();
+//   }, [endpoint]);
+//
+//   if (error) {
+//     return (
+//         <div>
+//           <h3>Error: {error.message}</h3>
+//           <Lottie animationData={errorAnimation} height={100} width={100} />
+//         </div>
+//     );
+//   }
+//
+//   const filteredData = data.filter((item) =>
+//       item.title.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
+//
+//
+//   const handleKeyDown = (event) => {
+//     if (event.key === 'Escape') {
+//       setSearchTerm('');
+//     }
+//   };
+//
+//   return (
+//       <div
+//           className="container text-center"
+//           style={{ fontSize: '20px' }}
+//           onKeyDown={handleKeyDown}
+//       >
+//         <div className="row">
+//           <div className="col-12">
+//             <h1 className="text-center">M3U Playlist</h1>
+//             <input
+//                 className="form-control text-center"
+//                 type="text"
+//                 placeholder="🔍 Search"
+//                 value={searchTerm}
+//                 onChange={(event) => setSearchTerm(event.target.value)}
+//             />
+//             <br/>
+//             <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+//               {filteredData.map((item, index) => (
+//                   <div key={item.url} className="col mb-4" style={{ height: '100%' }}>
+//                     <div
+//                         className="card"
+//                         style={{
+//                           backgroundColor: Constants.PASTEL_COLORS[index % Constants.PASTEL_COLORS.length],
+//                           height: '50',
+//                         }}
+//                     >
+//                       <div className="card-body">
+//                         <a
+//                             href={item.url}
+//                             target="_blank"
+//                             rel="noopener noreferrer"
+//                             style={{ textDecoration: 'none', color: 'black' }}
+//                         >
+//                           <h5 className="card-title">{item.title}</h5>
+//                         </a>
+//                       </div>
+//                     </div>
+//                   </div>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//   );
+//
+//
+//
+// };
+//
+// export default M3UList;
+
+
+
+
+
+// function MetadataFormEdit(editMetadata, type, handleInputChange, title, director, releaseYear, season, episode, duration, description, genre, posterUrl, videoUrl, soundtrackUrl) {
+//     return <form onSubmit={(e) => editMetadata(e)}>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='type'>
+//                 Type
+//             </label>
+//             <select
+//                 className='form-control col-span-small-6'
+//                 name='type'
+//                 id='type'
+//                 required
+//                 value={type}
+//                 onChange={handleInputChange}
+//             >
+//                 <option value=''>Select Type</option>
+//                 {Object.entries(Constants.CONTENT_TYPES_MAP).map(([key, value]) => (
+//                     <option key={key} value={key}>
+//                         {value}
+//                     </option>
+//                 ))}
+//             </select>
+//         </div>
+//
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='title'>
+//                 Title
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='text'
+//                 name='title'
+//                 id='title'
+//                 required
+//                 value={title}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='director'>
+//                 Director
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='text'
+//                 name='director'
+//                 id='director'
+//                 // required
+//                 value={director}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='releaseYear'>
+//                 Release Year
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type="number"
+//                 name='releaseYear'
+//                 id='releaseYear'
+//                 // required
+//                 value={releaseYear}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='season'>
+//                 Season
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type="number"
+//                 name='season'
+//                 id='season'
+//                 // required
+//                 value={season}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='episode'>
+//                 Episode
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type="number"
+//                 name='episode'
+//                 id='episode'
+//                 // required
+//                 value={episode}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='duration'>
+//                 Duration
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='number'
+//                 name='duration'
+//                 id='duraiton'
+//                 // required
+//                 value={duration}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='description'>
+//                 Description
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='text'
+//                 name='description'
+//                 id='description'
+//                 // required
+//                 value={description}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='genre'>
+//                 Genre
+//             </label>
+//             <select
+//                 className='form-control col-span-small-6'
+//                 name='genre'
+//                 id='genre'
+//                 // required
+//                 value={genre}
+//                 onChange={handleInputChange}
+//             >
+//                 <option value=''>Select Genre</option>
+//                 {ALL_GENRES.map((genre) => (
+//                     <option key={genre.id} value={genre.id}>
+//                         {genre.name}
+//                     </option>
+//                 ))}
+//             </select>
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='posterUrl'>
+//                 Poster URL
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='text'
+//                 name='posterUrl'
+//                 id='posterUrl'
+//                 // required
+//                 value={posterUrl}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='videoUrl'>
+//                 Video URL
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='text'
+//                 name='videoUrl'
+//                 id='videoUrl'
+//                 // required
+//                 value={videoUrl}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//
+//         <div className='input-group mb-5'>
+//             <label className='input-group-text' htmlFor='soundtrackUrl'>
+//                 Soundtrack URL
+//             </label>
+//             <input
+//                 className='form-control col-span-small-6'
+//                 type='text'
+//                 name='soundtrackUrl'
+//                 id='soundtrackUrl'
+//                 // required
+//                 value={soundtrackUrl}
+//                 onChange={(e) => handleInputChange(e)}
+//             />
+//         </div>
+//
+//         <div className='row mb-5'>
+//
+//             <div className='col-sm-2'>
+//                 <button
+//                     type='submit'
+//                     className='btn btn-outline-success btn-lg'
+//                 >
+//                     Update
+//                 </button>
+//             </div>
+//
+//             <div className='col-sm-2'>
+//                 <Link
+//                     to={"/view-metadatas"}
+//                     type='submit'
+//                     className='btn btn-outline-warning btn-lg'
+//                 >
+//                     Cancel
+//                 </Link>
+//             </div>
+//
+//         </div>
+//
+//     </form>;
+// }
+
+    // const {title, director, releaseYear, duration, description, genre, posterUrl, videoUrl, soundtrackUrl} = metadata;
+
+                    //navigate('/login', { state: { from: location }, replace: true });
+
+
+
+
+// function MetadataForm(saveMetadata, type, handleInputChange, title, director, releaseYear, season, episode, duration, description, genre, posterUrl, videoUrl, trailerUrl, soundtrackUrl) {
+//     return <Form onSubmit={(e) => saveMetadata(e)}>
+//
+//
+//         <Form.Group controlId="type">
+//             <Form.Label column sm="3">
+//                 Type
+//             </Form.Label>
+//
+//             <Form.Control
+//                 as="select"
+//                 name="type"
+//                 value={type || 'MOVIE'}
+//                 onChange={handleInputChange}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             >
+//                 {Object.entries(Constants.CONTENT_TYPES_MAP).map(([key, value]) => (
+//                     <option key={key} value={key}>
+//                         {value}
+//                     </option>
+//                 ))}
+//             </Form.Control>
+//
+//         </Form.Group>
+//
+//
+//         <Form.Group controlId="title">
+//             <Form.Label column sm="3">
+//                 Title
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="text"
+//                 name="title"
+//                 value={title || ''}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//
+//         <Form.Group controlId="director">
+//             <Form.Label column sm="3">
+//                 Director
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="text"
+//                 name="director"
+//                 value={director || ''}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//
+//         <Form.Group controlId="releaseYear">
+//             <Form.Label column sm="3">
+//                 Release Year
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="number"
+//                 name="releaseYear"
+//                 value={releaseYear || 0}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//
+//         {
+//             type === 'TV_SHOW' &&
+//             <Form.Group controlId="season">
+//                 <Form.Label column sm="3">
+//                     Season
+//                 </Form.Label>
+//
+//                 <Form.Control
+//                     type="number"
+//                     name="season"
+//                     value={season || null}
+//                     onChange={(e) => handleInputChange(e)}
+//                     className="form-control col-span-small-6 mb-3 input-black-border"
+//                 />
+//
+//             </Form.Group>
+//         }
+//
+//         {
+//
+//
+//             type === 'TV_SHOW' &&
+//             <Form.Group controlId="episode">
+//                 <Form.Label column sm="3">
+//                     Episode
+//                 </Form.Label>
+//
+//                 <Form.Control
+//                     type="number"
+//                     name="episode"
+//                     value={episode || null}
+//                     onChange={(e) => handleInputChange(e)}
+//                     className="form-control col-span-small-6 mb-3 input-black-border"
+//                 />
+//
+//             </Form.Group>
+//
+//
+//         }
+//
+//         <Form.Group controlId="duration">
+//             <Form.Label column sm="3">
+//                 Duration
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="number"
+//                 name="duration"
+//                 value={duration || 0}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//
+//         <Form.Group controlId="description">
+//             <Form.Label column sm="3">
+//                 Description
+//             </Form.Label>
+//
+//             <Form.Control
+//                 as="textarea"
+//                 rows={3}
+//                 name="description"
+//                 value={description || ''}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//
+//         <Form.Group controlId="genre">
+//             <Form.Label column sm="3">
+//                 Genre
+//             </Form.Label>
+//
+//             <Form.Control
+//                 as="select"
+//                 name="genre"
+//                 value={genre || ''}
+//                 onChange={handleInputChange}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             >
+//                 <option value=''>Select Genre</option>
+//                 {ALL_GENRES.map((genre) => (
+//                     <option key={genre.id} value={genre.name}>
+//                         {genre.name}
+//                     </option>
+//                 ))}
+//             </Form.Control>
+//
+//         </Form.Group>
+//
+//
+//         <Form.Group controlId="posterUrl">
+//             <Form.Label column sm="3">
+//                 Poster URL
+//             </Form.Label>
+//             <Form.Control
+//                 type="text"
+//                 name="posterUrl"
+//                 value={posterUrl || ''}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//         </Form.Group>
+//
+//         <Form.Group controlId="videoUrl">
+//             <Form.Label column sm="3">
+//                 Video URL
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="text"
+//                 name="videoUrl"
+//                 value={videoUrl || ''}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//         <Form.Group controlId="trailerUrl">
+//             <Form.Label column sm="3">
+//                 Trailer URL
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="text"
+//                 name="trailerUrl"
+//                 value={trailerUrl}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//         <Form.Group controlId="soundtrackUrl">
+//             <Form.Label column sm="3">
+//                 Soundtrack URL
+//             </Form.Label>
+//
+//             <Form.Control
+//                 type="text"
+//                 name="soundtrackUrl"
+//                 value={soundtrackUrl || ''}
+//                 onChange={(e) => handleInputChange(e)}
+//                 className="form-control col-span-small-6 mb-3 input-black-border"
+//             />
+//
+//         </Form.Group>
+//
+//         <div className="row mb-5 justify-content-center">
+//             <div className="col-sm-2">
+//                 <button type="submit" className="btn btn-outline-success btn-lg">
+//                     Save
+//                 </button>
+//             </div>
+//
+//             <div className="col-sm-2 justify-content-center">
+//                 <Link to="/view-metadatas">
+//                     <button
+//                         type="submit"
+//                         className="btn btn-outline-warning btn-lg"
+//                     >
+//                         Cancel
+//                     </button>
+//                 </Link>
+//             </div>
+//         </div>
+//     </Form>;
+// }
+
+
+
+    //
+    // useEffect(() => { loadMetadata(); }, []);
+    //
+    // const loadMetadata = async () => {
+    //     const result = await axios.get(`http://localhost:9192/metadatas/metadata/${id}`);
+    //     setMetadata(result.data); // .reverse()
+    //   }
+
+
+
+        // console.log(auth.accessToken + " -> auth..")
+
+
+
+
+
+    // useEffect(() => {
+    //
+    //     const handleKeyDown = (event) => {
+    //         if (event.key === 'Escape') {
+    //             searchQueryCurrent('');
+    //         }
+    //         if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'r') {
+    //             // Call the handleRefresh function
+    //             handleRefresh();
+    //         }
+    //     };
+    //             // ?by=${sortBy}&order=${sortOrder}&val=${contentType}&col=type`
+    //
+    // }, [searchQueryCurrent])
+
+
+  //
+    //
+    // const handleMouseEnter = (e) => {
+    //     setIsHovered(true);
+    //
+    //     // e.target.style.color = isFaved ? (isHovered ? 'red' : 'black') : (isHovered ? 'black' : 'red');
+    // };
+    //
+    // const handleMouseLeave = (e) => {
+    //     setIsHovered(false);
+    //
+    //     // e.target.style.color = isFaved ? (isHovered ? 'black' : 'red') : (isHovered ? 'red' : 'black');
+    // };
+
+
+
+                {/* onMouseEnter={(e) => {handleMouseEnter(e)}}*/}
+                {/* onMouseLeave={(e) => {handleMouseLeave(e)}}*/}
+
+
+    // const [title, setTitle] = useState(inputValue || '');
+    //
+    // // const handleInputChange = (e) => {
+    // //     setTitle(e.target.value);
+    // //     onInputChange && onInputChange(e.target.value);
+    // // };
+
+
+/ import {useNavigate, Link} from "react-router-dom";
+// import {useEffect, useState} from "react";
+// import "../custom.css"
+// import {axiosPrivate} from "../api/axios";
+// import SignOutButton from "./composes/SignOutButton";
+// import useUserStuff from "../hooks/useUserStuff";
+// import Loading from "./composes/Loading";
+// import FavouritesCarousel from "./composes/common/FavouritesCarousel";
+// import ServerInfoComponent from "./ServerInfoComponent";
+// import Paths from "../common/Paths";
+// import Constants from "../common/Constants";
+// import {Badge, Col, Row} from "react-bootstrap";
+// import './local/Local.css'
+//
+// const Home = () => {
+//     const navigate = useNavigate();
+//     const { userStuff } = useUserStuff();
+//     const [favourites, setFavourites] = useState([]);
+//
+//     useEffect(() => {
+//         const controller = new AbortController();
+//         const getFavs = async () => {
+//             try {
+//                 const response = await axiosPrivate.get('/favs/' + userStuff?.userId, {
+//                     signal: controller.signal,
+//                     withCredentials: true
+//                 });
+//                 setFavourites(response.data);
+//             } catch (err) {
+//                 navigate('/', {replace: true});
+//             }
+//         }
+//
+//         getFavs()
+//
+//         return () => {
+//             controller.abort();
+//         }
+//     }, [userStuff])
+//
+//
+//     const backgroundStyle = {
+//         backgroundImage: `url(${''}https://media.gq-magazine.co.uk/photos/5e5fc5ac63f53f0008cede5c/16:9/w_2240,c_limit/20200304-Anderson-03.jpg)`,
+//         zIndex: -1,
+//         backgroundSize: 'cover',
+//         backgroundPosition: 'center',
+//         backgroundRepeat: 'no-repeat',
+//         backgroundClip: 'border-box',
+//         backgroundAttachment: 'fixed',
+//         backgroundColor: '#000',
+//         color: '#fff',
+//         // filter: 'blur(1px)',
+//
+//         minHeight: '100vh',
+//     };
+//
+//
+//     return (
+//         <div
+//             className="d-flex align-items-center justify-content-center"
+//             // style={{minHeight: '100vh',}}
+//             style={backgroundStyle}
+//
+//         >
+//
+//         <Row >
+//             <Col md={6}>
+//                 <div >
+//                     {/*<h2>Sub' {userStuff && userStuff?.username}</h2>*/}
+//                     {
+//                         favourites.length > 0 ? (
+//                             <FavouritesCarousel favourites={favourites} />
+//                         ) : (
+//                             <Loading />
+//                             // <p>No Fav :( ...</p>
+//                         )
+//                     }
+//                 </div>
+//             </Col>
+//             <Col md={6}>
+//                 <div>
+//                     <Link hidden={!(userStuff?.roles?.main === Constants.ROLES.Manager)} to="/editor">
+//                         <Badge bg={'red'}>  Go to the Editor page </Badge>
+//                     </Link>
+//                     <br/>
+//                     <Link hidden={!(userStuff?.roles?.main === Constants.ROLES.Admin)} to={Paths.ADMIN}>
+//                         <Badge bg={'danger'} className={'hover-zoom'}> Go to the Admin page  </Badge>
+//                     </Link>
+//                     <div className="flexGrow hover-zoom">
+//                         <SignOutButton/>
+//                     </div>
+//
+//                     <ServerInfoComponent/>
+//                 </div>
+//             </Col>
+//         </Row>
+//         </div>
+//
+//     )
+// }
+//
+// export default Home
+
+
+
+
+
+
+
+
+
+/*.home-bg {*/
+/*    position: relative;*/
+/*    color: white;*/
+/*    !*Note, you can change the color to your choice depending on your*/
+/*    image and what color blends with it*!*/
+/*}*/
+
+/*.home-bg::after {*/
+/*    content: "";*/
+/*    opacity: 0.8;*/
+/*    background: rgb(26, 31, 41) url("https://media.gq-magazine.co.uk/photos/5e5fc5ac63f53f0008cede5c/16:9/w_2240,c_limit/20200304-Anderson-03.jpg") no-repeat fixed top;*/
+/*    background-blend-mode: luminosity;*/
+/*    !* also change the blend mode to what suits you, from darken, to other*/
+/*    many options as you deem fit*!*/
+/*    background-size: cover;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    position: absolute;*/
+/*    z-index: -1;*/
+/*    height: 500px;*/
+
+/*}*/
+
+
+
+/*.bg-image {*/
+/*    !* The image used *!*/
+/*    background-image: url("https://media.gq-magazine.co.uk/photos/5e5fc5ac63f53f0008cede5c/16:9/w_2240,c_limit/20200304-Anderson-03.jpg");*/
+
+/*    !* Add the blur effect *!*/
+/*    filter: blur(8px);*/
+/*    -webkit-filter: blur(8px);*/
+
+/*    !* Full height *!*/
+/*    !*height: 100%;*!*/
+
+/*    !* Center and scale the image nicely *!*/
+/*    background-position: center;*/
+/*    background-repeat: no-repeat;*/
+/*    background-size: cover;*/
+/*}*/
+
+/* Position text in the middle of the page/image */
+/*.bg-text {*/
+/*    !*background-color: rgb(0,0,0); !* Fallback color *!*!*/
+/*    !*background-color: rgba(0,0,0, 0.4); !* Black w/opacity/see-through *!*!*/
+/*    color: white;*/
+/*    font-weight: bold;*/
+/*    border: 3px solid #f1f1f1;*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    z-index: 2;*/
+/*    width: 80%;*/
+/*    padding: 20px;*/
+/*    text-align: center;*/
+/*}*/
+
+
+
+
+/*styles={{*/
+/*control: (provided) => ({*/
+/*...provided,*/
+/*backgroundColor: '#000000cc',*/
+/*color: '#ffffff',*/
+/*overflow: 'visible', // Set overflow to visible*/
+/*}),*/
+/*menu: (provided) => ({*/
+/*...provided,*/
+/*zIndex: 9999, // Adjust z-index as needed*/
+/*overflow: 'visible', // Set overflow to visible*/
+/*}),*/
+/*}}*/
+
+
+
+
+// function NavBarConditional()  {
+//     const nonNavBarRoutes = Paths.EXCLUDE_NAVBAR;
+//     const currentPath = window.location.pathname;
+//     const showNavBar = !nonNavBarRoutes.includes(currentPath);
+//     // const showNavBar = !nonNavBarRoutes.every((route) => !route.startsWith(currentPath));
+//     return showNavBar ? (
+//         <>
+//             <HandleKeyDown />
+//             <NavBar />
+//         </>
+//     ) : null;
+// };

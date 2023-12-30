@@ -1,111 +1,121 @@
-import {useNavigate, Link} from "react-router-dom";
-import {useEffect, useState} from "react";
-import "../custom.css"
-import useAuth from "../hooks/useAuth";
-import QRCode from "react-qr-code";
-import {axiosPrivate} from "../api/axios";
+
+import { useNavigate, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import "../custom.css";
+import { axiosPrivate } from "../api/axios";
 import SignOutButton from "./composes/SignOutButton";
 import useUserStuff from "../hooks/useUserStuff";
 import Loading from "./composes/Loading";
 import FavouritesCarousel from "./composes/common/FavouritesCarousel";
 import ServerInfoComponent from "./ServerInfoComponent";
 import Paths from "../common/Paths";
-
-
-function getHome(userStuff, favourites, isManager, isAdmin, ip, fIP) {
-    return (
-        <div
-        //     style={{
-        //     backgroundImage: `url("https://www.creativeboom.com/upload/articles/97/970e2b6cc4f8aa95f5b86d13dba063e4b0f65885_2560.jpg")`,
-        //     backgroundRepeat: 'no-repeat',
-        //     // width:'250px',
-        // }}
-        >
-
-            <h2>Sub' {userStuff && userStuff?.username}</h2>
-
-            {
-                favourites.length > 0 ? (
-
-                    <FavouritesCarousel favourites={favourites} />
-                ) : (
-                    <Loading />
-                    // <p>No Fav :( ...</p>
-                )
-            }
-
-
-            <Link hidden={!isManager} to="/editor">Go to the Editor page</Link>
-            <br/>
-            <Link hidden={!isAdmin} to={Paths.ADMIN}>Go to the Admin page</Link>
-            {/*<Link to="/linkpage">Go to the link page</Link>*/}
-            {/*<br/>*/}
-            {/*<Link to="/view-metadatas">See All Metadatas</Link>*/}
-            {/*<br/>*/}
-            {/*<Link to="/local">See Local Stuff</Link>*/}
-            {/*<br/>*/}
-            {/*<Link to="/filmbuff">Film Buff</Link>*/}
-
-            <SignOutButton/>
-
-            <ServerInfoComponent/>
-
-
-
-        </div>
-    );
-}
+import Constants from "../common/Constants";
+import { Badge, Col, Row } from "react-bootstrap";
+import "./local/Local.css";
+import "../experimental/x.css"
+import useLoading from "../hooks/useLoading";
 
 const Home = () => {
-    const navigate = useNavigate();
-
-    const {auth} = useAuth();
-    // console.log(JSON.stringify(auth?.roles))
-    const isAdmin = auth?.roles?.includes('ROLE_ADMIN');
-    const isManager = auth?.roles?.includes('ROLE_MANAGER');
-    // const isUser = auth?.roles?.includes('ROLE_USER');
-
-    const { userStuff } = useUserStuff();
-
-    const [favourites, setFavourites] = useState([]);
-
-
 
 
     useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
+
+    const navigate = useNavigate();
+    const { userStuff } = useUserStuff();
+    const [favourites, setFavourites] = useState([]);
+    const {isLoading, startLoading, stopLoading} = useLoading();
+
+    useEffect(() => {
+        startLoading();
         const controller = new AbortController();
         const getFavs = async () => {
             try {
-                const response = await axiosPrivate.get('/favs/' + auth?.userId, {
+                const response = await axiosPrivate.get("/favs/" + userStuff?.userId, {
                     signal: controller.signal,
-                    // withCredentials: true
+                    withCredentials: true,
                 });
-
-                console.log(response.data);
-
-                setFavourites(response.data);
-
+                if (response.status === 404){
+                    setFavourites([])
+                } else {
+                    setFavourites(response.data);
+                }
             } catch (err) {
-                navigate('/', {replace: true});
-                console.error(err);
+                navigate("/", { replace: true });
+            } finally {
+                stopLoading();
             }
-        }
+        };
 
-        getFavs()
-
+        getFavs();
 
         return () => {
             controller.abort();
-        }
-
-
-    }, [])
-
+        };
+    }, [userStuff]);
 
 
 
-    return (getHome(userStuff, favourites, isManager, isAdmin))
+    return (
+        <div style={{padding: 50}}>
+            <Row style={{padding: 50}}>
+                <Col md={6} className="d-flex align-items-center justify-content-center">
+                    <div className="text-center">
+                        {favourites.length > 0 ? (
+                            <FavouritesCarousel favourites={favourites} />
+                        ) : (
+                            <>
+                                <Loading anim={'empty'} header={
+                                    <p>You <br/> have <br/>no <br/>favourites<br/> yet.</p>
 
-}
+                                }
+                                //          footer={
+                                //     <div>
+                                //     <Link to={Paths.SEARCH} style={{color: 'white'}}>Search</Link>
+                                //         <br/>
+                                //         <br/>
+                                //     <Link to={Paths.VIEW_METADATAS} style={{color: 'white'}}>ShowAll</Link>
+                                //     </div>
+                                // }
+                                />
+                            </>
+                        )}
+                    </div>
+                </Col>
+                <Col md={6} className="d-flex align-items-center justify-content-center">
+                    <div className="text-center">
+                        <Link
+                            hidden={!(userStuff?.roles?.main === Constants.ROLES.Manager)}
+                            to="/editor"
+                        >
+                            <Badge bg={"red"}> Go to the Editor page </Badge>
+                        </Link>
+                        <br />
+                        <Link
+                            hidden={!(userStuff?.roles?.main === Constants.ROLES.Admin)}
+                            to={Paths.ADMIN}
+                        >
+                            <Badge bg={"danger"} className={"hover-zoom"}>
+                                {" "}
+                                Go to the Admin page{" "}
+                            </Badge>
+                        </Link>
+                        <div className="flexGrow hover-zoom">
+                            <SignOutButton />
+                        </div>
+                        <ServerInfoComponent />
+                    </div>
+                </Col>
+            </Row>
+        </div>
 
-export default Home
+
+    );
+};
+
+export default Home;
+

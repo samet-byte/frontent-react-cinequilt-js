@@ -20,7 +20,8 @@ import Paper from "@material-ui/core/Paper";
 import screenful from "screenfull";
 import Controls from "./Controls";
 import trvtt from './tr.vtt?url'
-import envtt from './en.vtt?url'  
+import envtt from './en.vtt?url'
+import {Tooltip} from "react-bootstrap";
 
 
 
@@ -155,13 +156,13 @@ const format = (seconds) => {
 
 let count = 0;
 
-function OtherPlayer({metadata}) {
+function CustomPlayer({metadata}) {
 
   let videoUrl =
-    // "https://sametb.com/enough.mp4"
+    "https://sametb.com/enough.mp4"
 
 
-"http://localhost:1234/LM386%20Audio%20Amplifier%20Simple%20Setup_1080p.mp4"
+// "http://localhost:1234/LM386%20Audio%20Amplifier%20Simple%20Setup_1080p.mp4"
       // "http://localhost:1234/Master%20Java%20Full%20Stack%20Development%20with%20Spring%20Boot%20and%20ReactJS.mp4"
 
 
@@ -364,11 +365,6 @@ function OtherPlayer({metadata}) {
 
   return (
     <>
-      {/* <AppBar position="fixed">
-        <Toolbar>
-          <Typography>React Video Player</Typography>
-        </Toolbar>
-      </AppBar> */}
       <Toolbar />
 
       <div className="row">
@@ -379,9 +375,10 @@ function OtherPlayer({metadata}) {
           {' '}
           <button onClick={() => { setTrackLang('off'); }}>❌</button>
         </div>
-        <br/>
+
       </div>
 
+      <br/>
 
 
       <Container maxWidth="md">
@@ -494,4 +491,4 @@ function OtherPlayer({metadata}) {
 // };
 }
 
-export default OtherPlayer;
+export default CustomPlayer;

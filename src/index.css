@@ -4,16 +4,20 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Josefin Sans', cursive;
+  /*font-family: 'Hanalei Fill', cursive;*/
 
 }
 
 html {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Hanalei Fill', cursive;
+  /*font-family: 'Nunito', sans-serif;*/
   font-size: 22px;
-  color: #fff;
-  background-color: whitesmoke;
+  /*color: #fff;*/
+  /*background-color: transparent;*/
 
 }
+
 
 body {
   min-height: 100vh;

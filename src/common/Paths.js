@@ -5,9 +5,10 @@ const Paths = {
     HOME: '/',
     LOGIN: '/login',
     REGISTER: '/register',
+    PASSWORD_FORGET: '/reset',
     PROFILE: '/profile',
     ADMIN: '/admin',
-    VIEW_METADATAS: '/view-metadatas',
+    VIEW_METADATAS: '/all',
     LOCAL: '/local',
     SEARCH: '/search',
     FILM_BUFF: '/filmbuff',
@@ -18,7 +19,6 @@ const Paths = {
     SIGN_UP: '/signup',
     SIGN_IN: '/signin',
     SIGN_OUT: '/signout',
-    PASSWORD_FORGET: '/pw-forget',
     PASSWORD_CHANGE: '/pw-change',
     KAYDOL: '/kaydol',
     GIRIS: '/giris',
@@ -27,9 +27,10 @@ const Paths = {
     LINK_PAGE: '/linkpage',
     MY_STUFF: '/my-stuff',
     REST_OF_THE_PATH: '*',
-    METADATA_PROFILE: '/metadata-profile',
-    METADATA_PROFILE_ID: '/metadata-profile/:id',
-    METADATA_PROFILE_TITLE: '/metadata-profile/:title',
+
+    METADATA_PROFILE: '/metadata',
+    METADATA_PROFILE_ID: `/metadata/:id`,
+    METADATA_PROFILE_TITLE: `/metadata/:title`,
 
     TV_SHOW: '/tv',
     EDIT_METADATA: '/edit-metadata',
@@ -37,6 +38,9 @@ const Paths = {
     EXCLUDE_NAVBAR: [
         'login',
         'register',
+        'reset',
+        '/reset',
+        '/reset/',
         'linkpage',
         'unauthorized',
         'service-unavailable',
@@ -75,7 +79,8 @@ const Paths = {
         PAGE: '/:page',
         QUERY: '/:query',
 
-    }
+    },
+        ABOUT: '/about'
 
 
 }

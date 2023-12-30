@@ -27,6 +27,7 @@ ReactDOM.render(
 );
 
 
+//todo: v17 to v18.
 
 // import 'bootstrap-icons/font/bootstrap-icons.css';
 // import 'react-toastify/dist/ReactToastify.css';
@@ -51,4 +52,3 @@ ReactDOM.render(
 //         </BrowserRouter>
 //     </StrictMode>,
 // );
-

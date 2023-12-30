@@ -8,7 +8,9 @@ const ProfileRow = ({ metadata, contentString }) => {
         return null;
     }
     return (
-        <div className="card mb-4">
+        <div className="card mb-4"
+
+        >
             <div className="card-body">
 
                 <div className="row">

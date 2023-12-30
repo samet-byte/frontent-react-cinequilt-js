@@ -5,22 +5,17 @@ import React from 'react';
 import useLogout from "../../hooks/useLogout";
 import {useNavigate} from "react-router-dom";
 
-function SignOutButton(props) {
-
+function SignOutButton() {
     const logout = useLogout();
     const navigate = useNavigate();
 
     const signOut = async () => {
         await logout();
-
         navigate('/login');
     }
 
-
     return (
         <div className="flexGrow">
-            {/*<br/>*/}
-                {/*btn-sm*/}
             <button
                 className="
                 btn

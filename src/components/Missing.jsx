@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import animationData from '../assets/anim/notfd.json';
+import animationData from '../assets/anim/pnf_404.json';
 import Lottie from "lottie-react";
 const Missing = () => {
 

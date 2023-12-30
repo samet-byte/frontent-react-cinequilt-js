@@ -10,7 +10,6 @@ export const NavBarConditional = () => {
     const nonNavBarRoutes = Paths.EXCLUDE_NAVBAR;
     const currentPath = window.location.pathname;
     const showNavBar = !nonNavBarRoutes.includes(currentPath);
-    // const showNavBar = !nonNavBarRoutes.every((route) => !route.startsWith(currentPath));
     return showNavBar ? (
         <>
             <HandleKeyDown />

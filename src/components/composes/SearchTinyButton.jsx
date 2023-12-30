@@ -15,7 +15,6 @@ const SearchTinyButton = ({ metadata, img, query, btnCls }) => {
         } else { console.log('No search term provided.'); }
     };
 
-            {/* <button onClick={searchWithQuery}>Search metadata.x on Google</button> */}
     return (
             <button
                 className={`btn ${btnCls}`}

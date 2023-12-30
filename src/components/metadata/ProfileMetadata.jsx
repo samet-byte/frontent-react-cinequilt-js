@@ -17,8 +17,9 @@ import Constants from "../../common/Constants";
 import {DeleteMetadataButton} from "../composes/DeleteMetadataButton";
 import {FaEdit} from "react-icons/fa";
 import Loading from "../composes/Loading";
+import { useBgImage } from "../../hooks/useBgImage";
 
-
+// film dizi sayfası
 
 function GoToTrailerButton(metadata) {
 	return <button
@@ -54,13 +55,18 @@ function PlayButtonIfExists(metadata) {
 function ContentView(metadata, navigate, ParentFavButton) {
 	return (
 		<div
-			className="shadow"
-			style={{backgroundColor: "whitesmoke"}}>
-			<div className="container py-5">
+			className="shadow-lg rounded-3"
+
+
+			>
+			<div className="container py-5"
+				style={{zIndex: 10}}
+			>
 				<div className="row">
 					<div className="col-lg-3">
 
-						<div className="card ">
+						<div className="card" >
+							<div style={{backgroundColor: "transparent", filter: 'blur(1px)'}}></div>
 							<div className="card-body text-center">
 								<img
 									src={metadata.posterUrl}
@@ -94,7 +100,7 @@ function ContentView(metadata, navigate, ParentFavButton) {
 									/>
 									{' '}
 									<ShouldShow
-										allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.Manager]}
+										allowedRoles={[Constants.ROLES.Admin]}
 										content={
 											<DeleteMetadataButton
 												id={metadata.id}
@@ -127,37 +133,36 @@ function ContentView(metadata, navigate, ParentFavButton) {
 
 					</div>
 
-					<div className="col-lg-9">
-						<div className="card "> {/* mb-4 */}
+					<div className="col-lg-8">
+						<div className="card" style={{backgroundColor: "transparent"}}> {/* mb-4 */}
 							<div className="card-body">
-								<ProfileRow metadata={metadata.title} contentString="Title"/>
-								<ProfileRow metadata={metadata.director} contentString="Director"/>
-								<ProfileRow metadata={metadata.releaseYear} contentString="Release Year"/>
+								{/*<ProfileRow metadata={metadata.title} contentString="Title"/>*/}
+								<ProfileRow metadata={metadata.director} contentString="Dir. / Prod."/>
+								{/*<ProfileRow metadata={metadata.releaseYear} contentString="Release Year"/>*/}
 								{metadata.type === 'MOVIE' && <ProfileRow metadata={`${metadata.duration} min.`} contentString="Duration "/>}
 								{metadata.type === 'TV_SHOW' && <ProfileRow metadata={metadata.seasonNumber} contentString="Seasons"/>}
 								{metadata.type === 'TV_SHOW' && <ProfileRow metadata={metadata.episodeNumber} contentString="Episodes"/>}
-								<ProfileRow metadata={metadata.id} contentString="ID"/>
+								{/*<ProfileRow metadata={metadata.id} contentString="ID"/>*/}
 								<ProfileRow metadata={metadata.genre} contentString="Genre"/>
 								<ProfileRow metadata={metadata.description} contentString="Description"/>
 								<ProfileRow metadata={metadata.type} contentString="Type"/>
 								<ProfileRow metadata={metadata.videoUrl} contentString="Video URL"/>
 								<ProfileRow metadata={metadata.trailerUrl} contentString="Trailer URL"/>
-								<ProfileRow metadata={metadata.soundtrackUrl} contentString="Soundtrack URL"/>
+								{/*<ProfileRow metadata={metadata.soundtrackUrl} contentString="Soundtrack URL"/>*/}
 
 								<SoundtrackEmbed soundtrackLink={metadata.soundtrackUrl}/>
 
-								{/*todo: OtherPlayer handle*/}
-								{/*<OtherPlayer metadata={metadata}/>*/}
+								{/*todo: CustomPlayer handle*/}
+								{/*<CustomPlayer metadata={metadata}/>*/}
 
 								<VideoEmbed embedUrl={metadata.videoUrl}/>
 
 
 								{(metadata.type === 'TV_SHOW') &&
+								<div style={{backgroundColor: "whitesmoke", padding: 10, borderRadius: 10}} >
 									<TVShowOverview metadata={metadata}/>
+								</div>
 								}
-
-
-
 							</div>
 						</div>
 					</div>
@@ -184,12 +189,13 @@ const ProfileMetadata = () => {
 	const [isLoaded, setIsLoaded] = useState(false);
 
     // let navigate = useNavigate();
-	const { title } = useParams();
+	// const { title } = useParams();
+	const { id } = useParams();
 
 	const navigate = useNavigate();
 	const location = useLocation();
 	const axiosPrivate = useAxiosPrivate();
-
+	const { setBgImageHandler } = useBgImage();
 	const { auth } = useAuth();
 
 	const[metadata, setmetadata] = useState({
@@ -211,13 +217,24 @@ const ProfileMetadata = () => {
 		let isMounted = true;
 		const controller = new AbortController();
 
+
 		isLoaded && setIsLoaded(false);
+				// const response = await axiosPrivate.get(`/metadatas/title/single/${title}`, {
 		const getInfo = async () => {
 			try {
-				const response = await axiosPrivate.get(`/metadatas/title/single/${title}`, {
+				const response = await axiosPrivate.get(`/metadatas/${id}`, {
 					signal: controller.signal
 				});
-				// console.log(response.data);
+				console.log(response.data);
+				if (response.data.backgroundImageUrl !== null && response.data.backgroundImageUrl !== localStorage.getItem('bgImage')) {
+					// setBgImageHandler(response.data.backgroundImageUrl);
+					setBgImageHandler(response.data.backgroundImageUrl, () => {
+						localStorage.setItem('bgImage', response.data.backgroundImageUrl);
+						navigate(0)
+						isMounted = false;
+					});
+					console.log("bg image set " + response.data.backgroundImageUrl)
+				}
 				isMounted && setmetadata(response.data);
 			} catch (err) {
 				console.error(err);

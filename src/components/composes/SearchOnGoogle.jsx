@@ -2,12 +2,7 @@
 // Dec 02, 2023 3:21 PM
 
 
-import React, {useState} from 'react';
-import {
-    // FaTrashAlt,
-    FaSearch,
-    // FaEdit, FaEye
-} from "react-icons/fa";
+import React from 'react';
 import logo from '../../assets/img/google_G_logo.png';
 
 const SearchOnGoogle = ({ metadata, query }) => {
@@ -18,7 +13,6 @@ const SearchOnGoogle = ({ metadata, query }) => {
         } else { console.log('No search term provided.'); }
     };
 
-                {/*<FaSearch />*/}
     return (
         <button
             className={`btn btn-outline-primary`}

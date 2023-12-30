@@ -3,37 +3,39 @@
 
 import React from 'react';
 import { Carousel } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import MovieCard from './MovieCard';
 import './MovieCard.css';
+import Paths from "../../../common/Paths";
 
 const FavouritesCarousel = ({ favourites }) => {
     return (
-        <div className={'centered-container custom-rounded'}>
+        <div className={'centered-container movie-card custom-rounded'} style={{backgroundColor: 'transparent'}}>
         <h3>Favourites</h3>
-        <div className="home-user-info movie-card custom-rounded">
+            {/*// custom-rounded">*/}
+        <div className="home-user-info movie-card custom-rounded" style={{backgroundColor: 'transparent'}}>
             <Carousel
+                key={'carousel'}
                 controls={true}
                 interval={null}
                 pause={false}
                 indicators={false}
                 nextIcon={<span aria-hidden="true" className="carousel-control-next-icon" />}
                 prevIcon={<span aria-hidden="true" className="carousel-control-prev-icon" />}
-                className="mx-auto custom-rounded"
-                style={{ width: '100%', borderRadius: '10px' }}
+                className="mx-auto"
+                style={{ width: '100%', borderRadius: '10px', backgroundColor: 'transparent'}}
             >
                 {favourites.map((favourite) => (
-                    <Carousel.Item key={favourite.id} className="custom-carousel custom-rounded"
+                    <Carousel.Item key={favourite.metadataId} className="custom-carousel custom-rounded"
                     >
-                        <Link to={`metadata-profile/${favourite.title}`} key={favourite.id}>
+                        {/*<Link to={`${Paths.METADATA_PROFILE}/${favourite.metadataId}`} key={favourite.metadataId}>*/}
                             <MovieCard
                                 title={favourite.title?.trim()}
                                 posterUrl={favourite.posterUrl}
                                 releaseYear={favourite.releaseYear}
                                 mediaType={favourite.type}
-                                linkTo={`metadata-profile/${favourite.title}`}
+                                linkTo={`${Paths.METADATA_PROFILE}/${favourite.metadataId}`}
                             />
-                        </Link>
+                        {/*</Link>*/}
                     </Carousel.Item>
                 ))}
             </Carousel>

@@ -31,128 +31,163 @@ import Constants from "./common/Constants";
 import Paths from "./common/Paths";
 import HandleKeyDown from "./components/HandleKeyDown";
 import NavBar from "./components/composes/NavBar";
-
-
-
-// function NavBarConditional()  {
-//     const nonNavBarRoutes = Paths.EXCLUDE_NAVBAR;
-//     const currentPath = window.location.pathname;
-//     const showNavBar = !nonNavBarRoutes.includes(currentPath);
-//     // const showNavBar = !nonNavBarRoutes.every((route) => !route.startsWith(currentPath));
-//     return showNavBar ? (
-//         <>
-//             <HandleKeyDown />
-//             <NavBar />
-//         </>
-//     ) : null;
-// };
-
 import { useLocation } from 'react-router-dom';
 import Settings from "./components/Settings";
+import BackgroundImage from "./components/BackgroundImage";
+import About from "./components/composes/About";
+import ResetPassword from "./components/auth/ResetPassword";
 
 function NavBarConditional() {
     const nonNavBarRoutes = Paths.EXCLUDE_NAVBAR.map(route => `/${route}`);
     const { pathname } = useLocation();
-    console.log(pathname)
     const showNavBar = !nonNavBarRoutes.includes(pathname);
 
     return showNavBar ? (
         <>
+            <div className="navbar-content">
             <HandleKeyDown />
             <NavBar />
+            </div>
+            <BackgroundImage>
+                {AllRoutes()}
+            </BackgroundImage>
         </>
-    ) : null;
+    ) : PublicRoutes();
 }
 
+function PublicRoutes() {
+    return (
+        <Routes>
+        <Route path={Paths.HOME} element={<Layout/>}>
+            {/* public routes */}
+            <Route path={Paths.LOGIN} element={<Login/>}/>
+            <Route path={Paths.REGISTER} element={<Register/>}/>
+            <Route path={Paths.PASSWORD_FORGET} element={<ResetPassword/>}/>
+            <Route path={Paths.LINK_PAGE} element={<LinkPage/>}/>
+            <Route path={Paths.UNAUTHORIZED} element={<Unauthorized/>}/>
+            <Route path={Paths.SERVICE_UNAVAILABLE} element={<ServiceUnavailable/>}/>
+        </Route>
+        </Routes>
+    );
+        }
+
+
+function AllRoutes() {
+    return <Routes>
+        <Route path={Paths.HOME} element={<Layout/>}>
+            {/*/!* public routes *!/*/}
+            {/*<Route path={Paths.LOGIN} element={<Login/>}/>*/}
+            {/*<Route path={Paths.REGISTER} element={<Register/>}/>*/}
+            {/*<Route path={Paths.LINK_PAGE} element={<LinkPage/>}/>*/}
+            {/*<Route path={Paths.UNAUTHORIZED} element={<Unauthorized/>}/>*/}
+            {/*<Route path={Paths.SERVICE_UNAVAILABLE} element={<ServiceUnavailable/>}/>*/}
+
+            <Route element={<PersistLogin/>}>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.HOME} element={<Home/>}/>
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Manager]}/>}>
+                    <Route path={Paths.MANAGER} element={<Manager/>}/>
+                </Route>
+
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.ADMIN} element={<Admin/>}/>
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route exact path={`${Paths.METADATA_PROFILE}`} element={<ProfileMetadata/>}></Route>
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route exact path={`${Paths.METADATA_PROFILE_ID}`} element={<ProfileMetadata/>}></Route>
+                </Route>
+
+                {/*<Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>*/}
+                {/*<Route exact path={`${Paths.TV_SHOW}${Paths.WITH.TITLE}`} element={<ProfileMetadata />}></Route>*/}
+                {/*</Route>*/}
+                {/*<Route exact path={"/tv/:title"} element={<ProfileMetadata />}></Route>*/}
+                {/*<Route exact path="/tv/:title/:season/:episode" element={<ProfileEpisode />}></Route>*/}
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.VIEW_METADATAS} element={<AllMetadatas/>}/>
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.ADD_METADATA} element={<AddMetadata/>}/>
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.LOCAL} element={<LocalDirect/>}/>
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.MY_STUFF} element={<M3UList/>}/>
+                    {/*<Route path="/my-stuff/:endpoint" element={<M3UList />} />*/}
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.FILM_BUFF} element={<FilmBuff/>}/>
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]}/>}>
+                    <Route path={`${Paths.EDIT_METADATA}${Paths.WITH.ID}`} element={<EditMetadata/>}/>
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.Manager, Constants.ROLES.User]}/>}>
+                    <Route path={Paths.SEARCH} element={<InstantSearch/>}/>
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]}/>}>
+                    <Route path={Paths.EXPERIMENTAL} element={<Experimental/>}/>
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.User, Constants.ROLES.Manager]}/>}>
+                    <Route path={Paths.SETTINGS} element={<Settings/>}/>
+                </Route>
+
+                <Route element={<RequireAuth
+                    allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.User, Constants.ROLES.Manager]}/>}>
+                    <Route path={Paths.ABOUT} element={<About/>}/>
+                </Route>
+
+
+            </Route>
+            {/* catch all */}
+            <Route path={Paths.REST_OF_THE_PATH} element={<NotFound/>}/>
+        </Route>
+    </Routes>;
+}
 
 function App() {
     return (
         <>
-        <NavBarConditional />
+            {/*<div className="navbar-content">*/}
+            {/*    <NavBarConditional/>*/}
+            {/*</div>*/}
+            <NavBarConditional/>
+            {/*<div>*/}
 
-        <Routes>
-            <Route path={Paths.HOME} element={<Layout />}>
-                {/* public routes */}
-                <Route path={Paths.LOGIN} element={<Login />} />
-                <Route path={Paths.REGISTER} element={<Register />} />
-                <Route path={Paths.LINK_PAGE} element={<LinkPage />} />
-                <Route path={Paths.UNAUTHORIZED} element={<Unauthorized />} />
-                <Route path={Paths.SERVICE_UNAVAILABLE} element={<ServiceUnavailable />} />
+            {/*    <div>*/}
+            {/*        <BackgroundImage>*/}
+            {/*            {AllRoutes()}*/}
+            {/*        </BackgroundImage>*/}
 
-                <Route element={<PersistLogin/>}>
+            {/*    </div>*/}
+            {/*</div>*/}
 
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.HOME} element={<Home />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Manager]} />}>
-                        <Route path={Paths.MANAGER} element={<Manager />} />
-                    </Route>
-
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.ADMIN} element={<Admin />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route exact path={`${Paths.METADATA_PROFILE}`} element={<ProfileMetadata />}></Route>
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route exact path={`${Paths.METADATA_PROFILE_TITLE}`} element={<ProfileMetadata />}></Route>
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route exact path={`${Paths.TV_SHOW}${Paths.WITH.TITLE}`} element={<ProfileMetadata />}></Route>
-                        {/*<Route exact path={"/tv/:title"} element={<ProfileMetadata />}></Route>*/}
-                        {/*<Route exact path="/tv/:title/:season/:episode" element={<ProfileEpisode />}></Route>*/}
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.VIEW_METADATAS} element={<AllMetadatas />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.ADD_METADATA} element={<AddMetadata />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.LOCAL} element={<LocalDirect />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.MY_STUFF} element={<M3UList />} />
-                        {/*<Route path="/my-stuff/:endpoint" element={<M3UList />} />*/}
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.FILM_BUFF} element={<FilmBuff />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]} />}>
-                        <Route path={`${Paths.EDIT_METADATA}${Paths.WITH.ID}`} element={<EditMetadata />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.SEARCH} element={<InstantSearch />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]} />}>
-                        <Route path={Paths.EXPERIMENTAL} element={<Experimental />} />
-                    </Route>
-
-                    <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.User, Constants.ROLES.Manager]} />}>
-                        <Route path={Paths.SETTINGS} element={<Settings />} />
-                    </Route>
-
-
-
-                </Route>
-                {/* catch all */}
-                <Route path={Paths.REST_OF_THE_PATH} element={<NotFound />} />
-            </Route>
-        </Routes>
         </>
+
     );
 }
 

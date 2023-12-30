@@ -8,6 +8,7 @@ import videoBackground from '../../assets/video/plastic_bag.mp4';
 import useUserStuff from "../../hooks/useUserStuff";
 import Constants from "../../common/Constants";
 import Lottie from "lottie-react";
+import Paths from "../../common/Paths";
 const LOGIN_URL = '/auth/authenticate';
 
 const Login = () => {
@@ -63,7 +64,7 @@ const Login = () => {
             const email = response?.data?.email;
             const country = response?.data?.country;
 
-            setAuth({ user, pwd, roles, accessToken, userId, username, email, country });
+            setAuth({ user, pwd, roles, accessToken, userId, username, email, country }); // todo: remove userId, username, email, country
             updateUserStuff({
                 userId: userId,
                 username: username,
@@ -72,11 +73,14 @@ const Login = () => {
                 roles: {all: roles, main: roles[roles.length - 1]}
             })
 
-
-
-            setUser('');
+            // setUser('');
             setPwd('');
-            navigate(from, { replace: true });
+
+            // if (Constants.SERVICE_UNAVAILABLE.contains(country))
+            if (country === 'ir' || country === 'nk')
+                navigate(Paths.SERVICE_UNAVAILABLE , {replace: true})
+            else
+                navigate(from, { replace: true });
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -99,12 +103,10 @@ const Login = () => {
     }
 
     useEffect(() => {
+        localStorage.setItem('username', user);
         localStorage.setItem("persist", persist);
-        // if(!persist) {localStorage.removeItem('username')}
-        // else {localStorage.setItem('username', user)}
-    }, [])
-
-
+        if(!persist) {localStorage.removeItem('username')}
+    }, [user, persist]);
 
     return (
         <div>
@@ -142,7 +144,7 @@ const Login = () => {
                         <br/>
                         <button className="btn btn-outline-warning center-item">
                             {isLoading ?
-                                <Lottie className={'center-item'} animationData={animData} style={{width: 50, height: 50}}/> : <>Wrap Me into
+                                <Lottie className={'center-item '} animationData={animData} style={{width: 50, height: 50}}/> : <>Wrap Me into
                                     Cinematic Warmth</>}
                         </button>
 
@@ -160,9 +162,17 @@ const Login = () => {
                     <p>
                         I need a quilt?<br />
                         <span className="line">
-                            {/*put router link here*/}
-                            <Link to={"/register"}>
+                            <Link to={Paths.REGISTER}>
                                 Sign Up
+                            </Link>
+                        </span>
+                    </p>
+
+                    <p>
+                        I forgot my password :(<br />
+                        <span className="line">
+                            <Link to={'/reset'}>
+                                Reset Password
                             </Link>
                         </span>
                     </p>

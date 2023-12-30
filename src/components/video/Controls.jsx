@@ -158,7 +158,8 @@ const Controls = forwardRef(
           >
             <Grid item>
               <Typography variant="h5" style={{ color: "#fff" }}>
-                {metadata.title} ({metadata.releaseYear})
+                {metadata.season ? `S${metadata.season}` : null}{metadata.episode ? `E${metadata.episode} - ` : null}
+                {metadata.title} {metadata.releaseYear ? `(${metadata.releaseYear})` : null}
               </Typography>
             </Grid>
             <Grid item>

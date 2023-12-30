@@ -3,9 +3,9 @@
 
 import React, { useState, useEffect } from 'react';
 import {axiosPrivate} from "../../../api/axios";
-import {Link} from "react-router-dom";
 import MovieCard from "../common/MovieCard";
 import Constants from "../../../common/Constants";
+import Paths from "../../../common/Paths";
 
 const gridContainerStyle = {
     display: 'grid',
@@ -15,7 +15,7 @@ const gridContainerStyle = {
 
 
 const InstantSearch = () => {
-    const [searchQuery, setSearchQuery] = useState(localStorage.getItem(Constants.LS_INSTANT_SEARCH_QUERY) || '');
+    const [searchQuery, setSearchQuery] = useState(''); //localStorage.getItem(Constants.LS_INSTANT_SEARCH_QUERY) || '');
     const [metadataList, setMetadataList] = useState([]);
     const [showContentCard, setShowContentCard] = useState(false);
 
@@ -59,16 +59,13 @@ const InstantSearch = () => {
                 {showContentCard && (
                     <div className="grid-container" style={gridContainerStyle}>
                         {metadataList.map((metadata) => (
-                            <Link to={`/metadata-profile/${metadata.title}`}
-                                  style={{textDecoration: 'none', justifyContent: 'center'}}>
                                 <MovieCard
                                     title={metadata.title}
                                     posterUrl={metadata.posterUrl}
                                     releaseYear={metadata.releaseYear}
                                     mediaType={metadata.type}
-                                    linkTo={`/metadata-profile/${encodeURIComponent(metadata.title)}`}
+                                    linkTo={`${Paths.METADATA_PROFILE}/${(metadata.id)}`}
                                 />
-                            </Link>
                         ))}
                     </div>
 

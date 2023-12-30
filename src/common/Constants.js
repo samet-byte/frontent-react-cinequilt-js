@@ -13,7 +13,8 @@ const Constants = {
     APP_ICON_URL: "https://sdk.bitmoji.com/render/panel/10227185-100025018093_7-s5-v1.png?transparent=1&palette=1&scale=2",
     // apiUrl: 'https://api.example.com',
     // posterBaseUrl: 'https://posters.example.com',
-
+    COMMON_BACKGROUND_URL: 'https://images.pexels.com/photos/6985001/pexels-photo-6985001.jpeg',
+    // COMMON_BACKGROUND_URL: 'https://sametb.com/quilt_up/17.png',
     POSTER_PLACEHOLDER_URL: 'https://sdk.bitmoji.com/me/sticker/j78cRDYobOkbHKwnQQDlnCATyVeig0bGqzyNqTVZDdcLtj9hn4hRcg/10227185.png?p=dD1zO2w9ZW4.v1&size=thumbnail',
 
     //INSTANT SEARCH
@@ -22,7 +23,7 @@ const Constants = {
 
     // FILM BUFF
     GPT_API: '',
-    NOT_AVAILABLE_COUNTRIES: ["ir",],
+    NOT_AVAILABLE_COUNTRIES: ["ir", "nk"],
     CONTENT_TYPES_MAP: {
         'TV_SHOW': 'TV Show',
         'MOVIE': 'Movie',
@@ -62,6 +63,30 @@ const Constants = {
         { value: 'pl', label: '🇵🇱 Poland' },
         { value: 'ir', label: '🇮🇷 Iran' },
         { value: 'nk', label: '🇰🇵 North Korea' },
+    ],
+
+    SERVICE_UNAVAILABLE: [
+        'ir',
+        'nk',
+    ],
+
+
+    PASTEL_COLORS: [
+        '#FFD1DC', // pastel pink
+        '#FFECB3', // pastel yellow
+        '#B2DFDB', // pastel green
+        '#C9D6EA', // pastel blue
+        '#FFD180', // pastel orange
+        '#FFB6C1', // pastel pink (lighter shade)
+        '#FFFACD', // pastel yellow (lighter shade)
+        '#98FB98', // pastel green (lighter shade)
+        '#ADD8E6', // pastel blue (lighter shade)
+        '#FFCC80', // pastel orange (lighter shade)
+        '#FF69B4', // pastel pink (darker shade)
+        '#FFD700', // pastel yellow (darker shade)
+        '#32CD32', // pastel green (darker shade)
+        '#87CEEB', // pastel blue (darker shade)
+        '#FF8C00', // pastel orange (darker shade)
     ],
 };
 

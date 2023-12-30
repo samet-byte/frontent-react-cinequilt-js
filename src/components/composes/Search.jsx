@@ -5,7 +5,6 @@ const Search = ({ search, setSearch }) => {
 		<div className="col-sm-6 mb-4">
 			<form 
             onSubmit={(e) => e.preventDefault()}
-            // !!
             >
 				<input
 					width={"100%"}

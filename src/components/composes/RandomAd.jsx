@@ -20,22 +20,15 @@ import image14 from '../../assets/advertisement/add_14.webp';
 import image15 from '../../assets/advertisement/add_15.webp';
 import image16 from '../../assets/advertisement/add_16.webp';
 
-
 function RandomAd(props) {
-
     const images = [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15, image16];
-
     const getRandomIndex = () => Math.floor(Math.random() * images.length);
-
     const [randomImage] = useState(images[getRandomIndex()]);
-
     const handleImageClick = () => {
-
         window.location.href = 'https://sametb.com';
     };
 
     return (
-
         <div>
             <img
                 src={randomImage}
@@ -44,7 +37,6 @@ function RandomAd(props) {
                 style={{borderRadius: '10px', cursor: 'pointer'}}
                 onClick={handleImageClick}
             />
-
         </div>
     );
 }

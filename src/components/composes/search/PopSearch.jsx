@@ -104,7 +104,7 @@ const SearchComponent = () => {
                                 <div
                                       onClick={() => {
                                           setShowModal(false)
-                                          navigate(`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`, { replace: true })
+                                          navigate(`${Paths.METADATA_PROFILE}/${(metadata.id)}`, { replace: true })
                                           navigate(0)
                                       }}
                                       style={{textDecoration: 'none'}}

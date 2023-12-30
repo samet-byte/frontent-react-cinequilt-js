@@ -1,8 +1,17 @@
 // Import necessary dependencies
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import Constants from "../../common/Constants";
 
 const LocalDirect = () => {
+
+    useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
+
     const [endpoint, setEndpoint] = useState(localStorage.getItem('endpoint') || '');
     const navigate = useNavigate();
 
@@ -15,7 +24,7 @@ const LocalDirect = () => {
             return;
         }
         else if (cEndpoint.startsWith('10.')){
-            cEndpoint = `${cEndpoint}/playlist.m3u`
+            cEndpoint = `http://${cEndpoint}/playlist.m3u`
             // cEndpoint = `http://${cEndpoint}/playlist.m3u`
         }
         else if (cEndpoint.length < 10 ){
@@ -29,25 +38,27 @@ const LocalDirect = () => {
         }
 
         localStorage.setItem('DLNA', cEndpoint)
-        // navigate(`/my-stuff/${encodeURIComponent(cEndpoint)}`);
         navigate(`/my-stuff`);
     };
 
     return (
         <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'cursive' }}>
-            <h1 style={{ color: '#4CAF50' }}>Welcome to the Charming LocalDirect Page!</h1>
-            <p style={{ fontSize: '1.2em', margin: '20px 0' }}>
-                Explore the magic of your local content by entering the enchanting endpoint below:
-            </p>
+            <h1 style={{ color: '#4CAF50' }}>Wanna wrap yourself<br/> with your own quilt?</h1>
+            {/*<p style={{ fontSize: '1.2em', margin: '20px 0' }}>*/}
+            {/*    Explore the magic of your local content by entering the enchanting endpoint below:*/}
+            {/*</p>*/}
             <p>
                 Valid Endpoints:
                 <br />
                 <span style={{ fontSize: '1.2em' }}>192.168.1.X:xxxx</span>
                 <br />
                 <span style={{ fontSize: '1.2em' }}>X:xxxx</span>
+                <br />
+                <span style={{ fontSize: '1.2em' }}>http://10.X.X.X:xxxx</span>
             </p>
             <label style={{ fontSize: '1.2em' }}>
-                Enter the Secret Endpoint:
+                Endpoint
+                <br/>
                 <input
                     type="text"
                     value={endpoint}

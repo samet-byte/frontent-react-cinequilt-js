@@ -16,12 +16,16 @@ function HandleKeyDown({handler}) {
             console.log('TAB key pressed!');
         }
         if (event.key === '.') {
-            console.log('" key pressed!');
+            console.log('" key p{ressed!');
             handler && handler();
         }
         if (event.key === 'S' || event.key === 's') {
             console.log('The S key was pressed!');
             // Add your logic here
+        }
+        if (event.metaKey && event.keyCode === 190) {
+            console.log('Control + Dot pressed on Mac!');
+            // Add your logic for Control + Dot here
         }
 
 

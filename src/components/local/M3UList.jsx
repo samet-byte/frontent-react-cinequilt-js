@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import ThumbnailComponent from '../ThumbnailComponent';
 import Lottie from 'lottie-react';
 import errorAnimation from '../../assets/anim/errorLottie.json';
-import {useParams} from "react-router-dom"; // Replace with the actual path to your Lottie animation JSON file
-
-
+import {useNavigate, useParams} from 'react-router-dom';
+import Constants from '../../common/Constants';
+import './Local.css'
 const M3UList = () => {
-  // const {endpoint} = useParams();
-  // if (endpoint === undefined || endpoint === null || endpoint === '') {
-  // const  endpoint = localStorage.getItem('DLNA') || useParams() || '';
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+      localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+      navigate(0)
+    }
+  }, []);
 
   let endpoint = localStorage.getItem('DLNA');
   const params = useParams();
 
   if (!endpoint) {
-    endpoint = params ? params.endpoint : ''; // Adjust to match your actual parameter name
+    endpoint = params ? params.endpoint : '';
   }
-
 
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const parseM3UPlaylist = (playlistString) => {
-
-    console.log(playlistString)
     const lines = playlistString.split('\n');
     const playlistData = [];
 
@@ -48,14 +49,6 @@ const M3UList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/${encodeURIComponent(endpoint)}`);
-        // const response = fetch(`http://localhost:3001/${encodeURIComponent(endpoint)}`)
-        //     .then(response => {
-        //       console.log(response)
-        //       response.json()
-        //     })
-        //     .then(data => console.log(data))
-        //     .catch(error => console.error('Error:', error));
-        // console.log(response.data)
         const parsedData = parseM3UPlaylist(response.data);
         setData(parsedData);
       } catch (error) {
@@ -64,7 +57,7 @@ const M3UList = () => {
     };
 
     fetchData();
-  }, [endpoint]); // Re-run effect when endpoint changes
+  }, [endpoint]);
 
   if (error) {
     return (
@@ -75,28 +68,13 @@ const M3UList = () => {
     );
   }
 
+  const handleItemClick = (item) => {
+    // setSelectedItem(item);
+  };
+
   const filteredData = data.filter((item) =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const pastelColors = [
-    '#FFD1DC', // pastel pink
-    '#FFECB3', // pastel yellow
-    '#B2DFDB', // pastel green
-    '#C9D6EA', // pastel blue
-    '#FFD180', // pastel orange
-    '#FFB6C1', // pastel pink (lighter shade)
-    '#FFFACD', // pastel yellow (lighter shade)
-    '#98FB98', // pastel green (lighter shade)
-    '#ADD8E6', // pastel blue (lighter shade)
-    '#FFCC80', // pastel orange (lighter shade)
-    '#FF69B4', // pastel pink (darker shade)
-    '#FFD700', // pastel yellow (darker shade)
-    '#32CD32', // pastel green (darker shade)
-    '#87CEEB', // pastel blue (darker shade)
-    '#FF8C00', // pastel orange (darker shade)
-    // Add more pastel colors as needed
-  ];
 
   const handleKeyDown = (event) => {
     if (event.key === 'Escape') {
@@ -120,16 +98,21 @@ const M3UList = () => {
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
             />
-            <br/>
+            <br />
             <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
               {filteredData.map((item, index) => (
-                  <div key={item.url} className="col mb-4" style={{ height: '100%' }}>
+                  <div
+                      key={item.url}
+                      className="col mb-4 hover-zoom"
+                      style={{ height: '100%' }}
+                      onClick={() => handleItemClick(item)}
+                  >
                     <div
                         className="card"
                         style={{
-                          // backgroundColor: generateRandomColor(),
-                          backgroundColor: pastelColors[index % pastelColors.length],
-                          height: '50', // Set a fixed height for the card
+                          backgroundColor:
+                              Constants.PASTEL_COLORS[index % Constants.PASTEL_COLORS.length],
+                          height: '50',
                         }}
                     >
                       <div className="card-body">
@@ -140,20 +123,28 @@ const M3UList = () => {
                             style={{ textDecoration: 'none', color: 'black' }}
                         >
                           <h5 className="card-title">{item.title}</h5>
-                          {/*<video src={item.url} width="320" height="240" controls/>*/}
                         </a>
                       </div>
                     </div>
                   </div>
               ))}
             </div>
+
+
+            {/*{selectedItem && (*/}
+            {/*    <div className={'center-item'}>*/}
+            {/*      <h2>Selected Video: {selectedItem.title}</h2>*/}
+            {/*      <video controls style={{ width: '50%', height: '50%' }}>*/}
+            {/*        <source src={selectedItem.url} type="video/mp4" />*/}
+            {/*        Your browser does not support the video tag.*/}
+            {/*      </video>*/}
+
+            {/*    </div>*/}
+            {/*)}*/}
           </div>
         </div>
       </div>
   );
-
-
-
 };
 
 export default M3UList;

@@ -14,17 +14,14 @@ import Constants from "../../../common/Constants"; // Import the external styles
 
 const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo }) => {
 
-    const { userStuff } = useUserStuff();
-
     return (
-        // <Card style={{ background: '#000', position: 'relative' }}>
-        <Card className={'movie-card center-div'}>
+        <Card className={'movie-card center-div'} key={'card'} style={{backgroundColor: 'transparent'}}>
         {/* Dimmed poster image */}
             <Card.Img
                 variant="top"
                 src={posterUrl}
                 alt={`${title} Poster`}
-                style={{ filter: 'brightness(40%)', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                style={{ filter: 'brightness(50%)', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
 
             />
 
@@ -41,30 +38,18 @@ const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo }) => {
                 {mediaType === 'TV_SHOW' ? '📺' : '🎬'}
             </div>
 
-            {/*<div
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 10,
-                    color: '#fff',
-                    fontSize: '24px',
-                }}
-            >
-                {userStuff?.roles?.main === Constants.ROLES.Admin ?
-                    <DeleteMetadataButton/>
-                    : null
-                }
-            </div>*/}
-
-
-
             {/* Title and release year in bottom left corner */}
             <Card.Body
                 style={{
                     position: 'absolute',
                     bottom: 10,
                     left: 10,
+                    right: 10,
                     color: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                 }}
             >
                 <Card.Title>{title}</Card.Title>

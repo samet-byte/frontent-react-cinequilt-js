@@ -46,18 +46,23 @@ const NavBar = () => {
         ];
     }
 
+    const onlyOffcanvasRoutes = [
+        { to: Paths.SEARCH, label: 'Instant Search' },
+        { to: Paths.SETTINGS, label: 'Settings' },
+        { to: Paths.ABOUT, label: 'About' },
+    ];
+
     const navItems = [
         { to: Paths.HOME, label: Constants.APP_NAME },
         { to: Paths.VIEW_METADATAS, label: "View All of 'em" },
         { to: Paths.LOCAL, label: 'Local Files' },
         { to: Paths.FILM_BUFF, label: 'Film Buff' },
-        { to: Paths.SEARCH, label: 'Instant Search' },
-        { to: Paths.SETTINGS, label: 'Settings' },
     ];
 
     const dynamicNavItems = [
         ...dynamicRoutes.map(route => ({ to: route.to, label: route.label })),
     ];
+
 
 
 //mb-5
@@ -78,15 +83,17 @@ const NavBar = () => {
                     />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"
-                               onClick={toggleOffcanvas}
+                               // onClick={toggleOffcanvas}
                 />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         {navItems.map((item, index) => (
                             <Link key={index} to={item.to} className="nav-link" style={{ color: 'white' }}>{item.label}</Link>
                         ))}
-                        <PopSearch />
                     </Nav>
+                    <div style={{marginLeft: "auto", paddingRight: 20}}>
+                            <PopSearch />
+                        </div>
                 </Navbar.Collapse>
             </Navbar>
 
@@ -121,6 +128,9 @@ const NavBar = () => {
                             <Link key={index} to={item.to} className="nav-link custom-nav-link mb-1" style={{ color: 'black' }}>{item.label} </Link>
                         ))}
                         {dynamicNavItems.map((item, index) => (
+                            <Link key={index} to={item.to} className="nav-link custom-nav-link mb-1" style={{ color: 'black' }}>{item.label}</Link>
+                        ))}
+                        {onlyOffcanvasRoutes.map((item, index) => (
                             <Link key={index} to={item.to} className="nav-link custom-nav-link mb-1" style={{ color: 'black' }}>{item.label}</Link>
                         ))}
                         <SignOutButton/>
