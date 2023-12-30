@@ -144,10 +144,6 @@ function AllRoutes() {
                     <Route path={Paths.SETTINGS} element={<Settings/>}/>
                 </Route>
 
-                <Route element={<RequireAuth
-                    allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.User, Constants.ROLES.Manager]}/>}>
-                    <Route path={Paths.ABOUT} element={<About/>}/>
-                </Route>
 
 
             </Route>
