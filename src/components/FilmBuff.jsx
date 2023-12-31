@@ -1,12 +1,13 @@
 // Author: sametbayat
 // Dec 02, 2023 9:56 PM
 
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import '../App.css'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import Constants from "../common/Constants";
 import Cookies from "js-cookie";
+import {useNavigate} from "react-router-dom";
 
 const API_KEY = Cookies.get('gpt_api_key') || Constants.GPT_API || '';
 
@@ -16,6 +17,16 @@ const systemMessage = {
 }
 
 function App() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
+
     const [messages, setMessages] = useState([
         {
             message: "Hello, I'm FilmBuff! " +

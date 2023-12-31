@@ -1,12 +1,15 @@
 // Author: sametbayat
 // Dec 14, 2023 2:18 PM
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaPlayCircle } from 'react-icons/fa';
 import CustomPlayer from "../video/CustomPlayer";
+import VideoEmbed from "../video/VideoEmbed";
 
-const RowEpisode = ({ episode, metadata }) => {
+const RowEpisode = ({ episode }) => {
+
+
 
     const tooltip = (
         <Tooltip key={episode.episode} id={`tooltip-${episode.episode}`}>
@@ -37,7 +40,16 @@ const RowEpisode = ({ episode, metadata }) => {
                         </OverlayTrigger>
                 </div>
             </div>
-            {showVideo && <CustomPlayer metadata={episode} />}
+
+            {episode.videoUrl && (
+                showVideo && (
+                    episode.videoUrl.includes('embed') ?
+                <VideoEmbed embedUrl={episode.videoUrl} /> :
+                <CustomPlayer metadata={episode} />
+                )
+            )
+            }
+
         </div>
     );
 };

@@ -16,7 +16,11 @@ const MetadataCard = ({ metadata }) => {
 
     return (
         <Link to={`${Paths.METADATA_PROFILE}/${encodeURIComponent(metadata.title)}`} style={{ textDecoration: 'none' }}>
-        <Card className="mb-1 custom-hover-card custom-card">
+        <Card className="mb-1 custom-hover-card custom-card"
+              onClick={() => {
+                metadata.backgroundImageUrl &&  localStorage.setItem('bgImage', metadata.backgroundImageUrl)
+              }}
+        >
             <Card.Body>
                 <Card.Text>
                         <span className="text-muted">{getMediaTypeEmoji()}</span> {metadata.mediaType}

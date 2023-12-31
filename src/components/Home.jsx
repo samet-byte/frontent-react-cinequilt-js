@@ -73,14 +73,6 @@ const Home = () => {
                                     <p>You <br/> have <br/>no <br/>favourites<br/> yet.</p>
 
                                 }
-                                //          footer={
-                                //     <div>
-                                //     <Link to={Paths.SEARCH} style={{color: 'white'}}>Search</Link>
-                                //         <br/>
-                                //         <br/>
-                                //     <Link to={Paths.VIEW_METADATAS} style={{color: 'white'}}>ShowAll</Link>
-                                //     </div>
-                                // }
                                 />
                             </>
                         )}

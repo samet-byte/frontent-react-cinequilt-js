@@ -6,6 +6,9 @@ import { Tabs, Tab } from 'react-bootstrap';
 import {axiosPrivate} from "../../api/axios";
 import RowEpisode from "./RowEpisode";
 import Loading from "../composes/Loading";
+import {ShouldShow} from "../../common/ShouldShow";
+import Constants from "../../common/Constants";
+import {DeleteMetadataButton} from "../composes/DeleteMetadataButton";
 
 // get only 1 season content
 // sezona göre bölümleri getirir
@@ -63,15 +66,22 @@ const DynamicTabsSeasons = ({ metadata, tabCount }) => {
                     <Tab
                         key={tabIndex}
                         eventKey={tabIndex.toString()}
-                        title={`Season ${tabIndex}`}
+                        title={`S${tabIndex}`}
                     >
                         <br />
-                        {isLoaded ? (
-                            episodes.map((episode) => (
-                                <div key={episode.id} className="center-div">
-                                    <RowEpisode episode={episode} metadata={metadata} />
-                                </div>
-                            ))
+                        {
+                            isLoaded ? (
+                                episodes.length > 0 ? (
+                                episodes.map((episode) => (
+                                    <div key={episode.id} className="center-div">
+                                        <RowEpisode episode={episode} metadata={metadata} />
+                                    </div>
+                                ))
+                                ) : (
+                                    <div className="center-div">
+                                        <h3>No episodes found for this season.</h3>
+                                    </div>
+                                )
                         ) : (
                             <Loading anim="m1" />
                         )}

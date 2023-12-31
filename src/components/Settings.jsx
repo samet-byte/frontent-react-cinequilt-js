@@ -10,9 +10,20 @@ import axios, {axiosPrivate} from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import useLoading from "../hooks/useLoading";
 import Loading from "./composes/Loading";
+import Constants from "../common/Constants";
+import {useNavigate} from "react-router-dom";
 
 // ayarlar, ülke, şifre değiştirme
 function Settings() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
 
     const [currentPwd, setCurrentPwd] = useState(null);
     const [pwd, setPwd] = useState(null);

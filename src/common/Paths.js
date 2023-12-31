@@ -34,6 +34,7 @@ const Paths = {
 
     TV_SHOW: '/tv',
     EDIT_METADATA: '/edit-metadata',
+    ADD_EPISODE: '/add-episode',
 
     EXCLUDE_NAVBAR: [
         'login',

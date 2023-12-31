@@ -7,8 +7,9 @@ import MovieCard from "../composes/common/MovieCard";
 import {SortView} from "../composes/SortView";
 import '../../experimental/x.css'
 import Paths from "../../common/Paths";
+import Constants from "../../common/Constants";
 
-function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages) {
+function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages, navigate) {
     return (
         <div className="centered-container">
             <Search
@@ -21,14 +22,29 @@ function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrd
 
             <Row className="mt-4">
                 {filteredMetadatas.map((metadata) => (
-                    <Col key={metadata.id} xs={12} sm={6} md={4} lg={3} className="mb-4 d-flex justify-content-center align-items-center">
+                    <Col key={metadata.id} xs={12} sm={6} md={4} lg={3} className="mb-4 d-flex justify-content-center align-items-center"
+                        onClick={() => {
+                            if (localStorage.getItem('bgImage') !== metadata.backgroundImageUrl && metadata.backgroundImageUrl !== null)
+                            localStorage.setItem('bgImage', metadata.backgroundImageUrl)
+                            console.log(metadata.backgroundImageUrl)
+                        }}
+                    >
+                        <div
+                            onClick={() => {
+                                navigate(`${Paths.METADATA_PROFILE}/${(metadata.id)}`, { replace: true })
+                                navigate(0)
+                            }}
+                            style={{textDecoration: 'none'}}
+                        >
                         <MovieCard
                             title={metadata.title?.trim()}
                             posterUrl={metadata.posterUrl}
                             releaseYear={metadata.releaseYear}
                             mediaType={metadata.type}
                             linkTo={`${Paths.METADATA_PROFILE}/${(metadata.id)}`}
+                            bgImage={metadata.backgroundImageUrl}
                         />
+                        </div>
                     </Col>
                 ))}
             </Row>
@@ -72,7 +88,6 @@ function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrd
 const AllMetadatas = () => {
     const [metadatas, setMetadatas] = useState([]);
     const axiosPrivate = useAxiosPrivate();
-    const navigate = useNavigate();
     const [search, setSearch] = useState("");
     const searchQueryCurrent = search.toLowerCase();
     const [sortBy, setSortBy] = useState(localStorage.getItem('sortBy') || 'title');
@@ -81,6 +96,14 @@ const AllMetadatas = () => {
     const [pageSize, setPageSize] = useState(localStorage.getItem('pageSize') || 10);
     const [pageNumber, setPageNumber] = useState(localStorage.getItem('pageNumber') || 1);
     const [totalPages, setTotalPages] = useState(999);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
 
     const handlePrevPage = () => { setPageNumber(Number(pageNumber) - 1); }
 
@@ -163,10 +186,11 @@ const AllMetadatas = () => {
         mt.releaseYear.toString().toLowerCase().includes(searchQueryCurrent)
     );
 
+
     return (
         // !isProcessing ?
         <div >
-            {ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages)}
+            {ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages, navigate)}
         </div>
             // : <Loading anim={'m1'} size={'100px'}/>
     )

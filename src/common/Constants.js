@@ -13,7 +13,8 @@ const Constants = {
     APP_ICON_URL: "https://sdk.bitmoji.com/render/panel/10227185-100025018093_7-s5-v1.png?transparent=1&palette=1&scale=2",
     // apiUrl: 'https://api.example.com',
     // posterBaseUrl: 'https://posters.example.com',
-    COMMON_BACKGROUND_URL: 'https://images.pexels.com/photos/6985001/pexels-photo-6985001.jpeg',
+    // COMMON_BACKGROUND_URL: 'https://images.pexels.com/photos/6985001/pexels-photo-6985001.jpeg',
+    COMMON_BACKGROUND_URL: 'https://img.freepik.com/free-vector/vibrant-summer-ombre-background-vector_53876-105765.jpg?w=2000&t=st=1704024431~exp=1704025031~hmac=406628cbfa45d2cf2a58d42a32df797c470f11fb87b1d2937cdf85d96b32806f',
     // COMMON_BACKGROUND_URL: 'https://sametb.com/quilt_up/17.png',
     POSTER_PLACEHOLDER_URL: 'https://sdk.bitmoji.com/me/sticker/j78cRDYobOkbHKwnQQDlnCATyVeig0bGqzyNqTVZDdcLtj9hn4hRcg/10227185.png?p=dD1zO2w9ZW4.v1&size=thumbnail',
 

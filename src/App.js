@@ -36,6 +36,7 @@ import Settings from "./components/Settings";
 import BackgroundImage from "./components/BackgroundImage";
 import About from "./components/composes/About";
 import ResetPassword from "./components/auth/ResetPassword";
+import AddEpisode from "./components/metadata/AddEpisode";
 
 function NavBarConditional() {
     const nonNavBarRoutes = Paths.EXCLUDE_NAVBAR.map(route => `/${route}`);
@@ -109,6 +110,10 @@ function AllRoutes() {
 
                 <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
                     <Route path={Paths.ADD_METADATA} element={<AddMetadata/>}/>
+                </Route>
+
+                <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+                    <Route path={`${Paths.ADD_EPISODE}${Paths.WITH.ID}`} element={<AddEpisode/>}/>
                 </Route>
 
                 <Route element={<RequireAuth

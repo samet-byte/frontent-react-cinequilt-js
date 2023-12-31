@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {useNavigate, useLocation, Link} from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import ProfileRow from '../composes/ProfileRow';
@@ -15,9 +15,11 @@ import wikiLogo from '../../assets/img/wiki_logo.png';
 import {ShouldShow} from "../../common/ShouldShow";
 import Constants from "../../common/Constants";
 import {DeleteMetadataButton} from "../composes/DeleteMetadataButton";
-import {FaEdit} from "react-icons/fa";
+import {FaEdit, FaPlus} from "react-icons/fa";
 import Loading from "../composes/Loading";
 import { useBgImage } from "../../hooks/useBgImage";
+import CustomPlayer from "../video/CustomPlayer";
+import Paths from "../../common/Paths";
 
 // film dizi sayfası
 
@@ -56,8 +58,6 @@ function ContentView(metadata, navigate, ParentFavButton) {
 	return (
 		<div
 			className="shadow-lg rounded-3"
-
-
 			>
 			<div className="container py-5"
 				style={{zIndex: 10}}
@@ -85,10 +85,38 @@ function ContentView(metadata, navigate, ParentFavButton) {
 								</div>
 
 								<div>
+
+									{
+										metadata.type === 'TV_SHOW' &&
+										<ShouldShow
+											allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.Manager]}
+											content={
+												<>
+												<Link
+													to={{
+														pathname: `${Paths.ADD_EPISODE}/${metadata.id}`,
+													}}
+												>
+													<button
+														type="button"
+														className="btn btn-outline-primary"
+														onClick={() => {
+															navigate(`/add-episode/${metadata.id}`);
+														}}
+													>
+														<FaPlus />
+													</button>
+												</Link>
+												<span> </span>
+												</>
+											}
+										/>
+									}
+
 									<ShouldShow
 										allowedRoles={[Constants.ROLES.Admin, Constants.ROLES.Manager]}
 										content={
-											<Link to={`/edit-metadata/${metadata.id}`} >
+											<Link to={`${Paths.EDIT_METADATA}/${metadata.id}`} >
 												<button
 													type="button"
 													className="btn btn-outline-warning"
@@ -137,7 +165,7 @@ function ContentView(metadata, navigate, ParentFavButton) {
 						<div className="card" style={{backgroundColor: "transparent"}}> {/* mb-4 */}
 							<div className="card-body">
 								{/*<ProfileRow metadata={metadata.title} contentString="Title"/>*/}
-								<ProfileRow metadata={metadata.director} contentString="Dir. / Prod."/>
+								<ProfileRow metadata={metadata.director} contentString={metadata.type === 'MOVIE' ? 'Director': 'Producer'}/>
 								{/*<ProfileRow metadata={metadata.releaseYear} contentString="Release Year"/>*/}
 								{metadata.type === 'MOVIE' && <ProfileRow metadata={`${metadata.duration} min.`} contentString="Duration "/>}
 								{metadata.type === 'TV_SHOW' && <ProfileRow metadata={metadata.seasonNumber} contentString="Seasons"/>}
@@ -156,6 +184,8 @@ function ContentView(metadata, navigate, ParentFavButton) {
 								{/*<CustomPlayer metadata={metadata}/>*/}
 
 								<VideoEmbed embedUrl={metadata.videoUrl}/>
+
+								{/*<CustomPlayer metadata={metadata}/>*/}
 
 
 								{(metadata.type === 'TV_SHOW') &&
@@ -213,13 +243,13 @@ const ProfileMetadata = () => {
 	});
 
 
+
+
 	useEffect(() => {
 		let isMounted = true;
 		const controller = new AbortController();
 
-
 		isLoaded && setIsLoaded(false);
-				// const response = await axiosPrivate.get(`/metadatas/title/single/${title}`, {
 		const getInfo = async () => {
 			try {
 				const response = await axiosPrivate.get(`/metadatas/${id}`, {
@@ -227,7 +257,6 @@ const ProfileMetadata = () => {
 				});
 				console.log(response.data);
 				if (response.data.backgroundImageUrl !== null && response.data.backgroundImageUrl !== localStorage.getItem('bgImage')) {
-					// setBgImageHandler(response.data.backgroundImageUrl);
 					setBgImageHandler(response.data.backgroundImageUrl, () => {
 						localStorage.setItem('bgImage', response.data.backgroundImageUrl);
 						navigate(0)

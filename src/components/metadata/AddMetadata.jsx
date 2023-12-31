@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
@@ -6,10 +6,19 @@ import Loading from "../composes/Loading";
 import {MetadataForm} from "./MetadataForm";
 import Paths from "../../common/Paths";
 import backgroundImage from "../BackgroundImage";
+import Constants from "../../common/Constants";
 
 const AddMetadata = () => {
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
+
     const axiosPrivate = useAxiosPrivate();
     // const location = useLocation();
     const { auth } = useAuth();

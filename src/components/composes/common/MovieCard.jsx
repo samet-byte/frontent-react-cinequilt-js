@@ -9,13 +9,25 @@ import './MovieCard.css';
 import {Link} from "react-router-dom";
 import useUserStuff from "../../../hooks/useUserStuff";
 import {DeleteMetadataButton} from "../DeleteMetadataButton";
-import Constants from "../../../common/Constants"; // Import the external stylesheet
+import Constants from "../../../common/Constants";
+import {useBgImage} from "../../../hooks/useBgImage"; // Import the external stylesheet
 
 
-const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo }) => {
+const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo, bgImage }) => {
+
+    const { setBgImageHandler } = useBgImage();
 
     return (
-        <Card className={'movie-card center-div'} key={'card'} style={{backgroundColor: 'transparent'}}>
+        <Card className={'movie-card center-div'} key={title} style={{backgroundColor: 'transparent'}}
+              onClick={() => {
+                  if (localStorage.getItem('bgImage') !== bgImage && bgImage !== null)
+                  setBgImageHandler(bgImage)
+                  bgImage &&  localStorage.setItem('bgImage', bgImage)
+                  console.log("set:: " + bgImage)
+
+              }
+              }
+        >
         {/* Dimmed poster image */}
             <Card.Img
                 variant="top"
@@ -56,7 +68,7 @@ const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo }) => {
                 <Card.Text>{`Release Year: ${releaseYear}`}</Card.Text>
             </Card.Body>
 
-            {/* Link to "/info" */}
+             {/*Link to "/info"*/}
             <Link
                 to={linkTo}
                 style={{

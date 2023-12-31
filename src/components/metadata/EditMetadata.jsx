@@ -13,7 +13,14 @@ import Paths from "../../common/Paths";
 
 const EditMetadata = () => {
 
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
+            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
+            navigate(0)
+        }
+    }, []);
     
     const { id } = useParams();
 

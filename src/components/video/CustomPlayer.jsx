@@ -177,11 +177,11 @@ function CustomPlayer({metadata}) {
         // "https://www.youtube.com/watch?v=mbSKrX6mWzk"
 ;
 
-  if (metadata.trailerUrl) {
-    videoUrl = metadata.trailerUrl;
-  }
-  else if (metadata.videoUrl) {
+    if (metadata.videoUrl) {
     videoUrl = metadata.videoUrl;
+  }
+  else if (metadata.trailerUrl) {
+    videoUrl = metadata.trailerUrl;
   }
   const classes = useStyles();
   // const [showControls, setShowControls] = useState(false);
