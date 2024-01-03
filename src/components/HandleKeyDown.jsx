@@ -21,7 +21,7 @@ function HandleKeyDown({handler}) {
         }
         if (event.key === '.') {
             console.log('" key p{ressed!');
-            handler && handler();
+            // handler && handler();
         }
         if (event.key === 'S' || event.key === 's') {
             console.log('The S key was pressed!');

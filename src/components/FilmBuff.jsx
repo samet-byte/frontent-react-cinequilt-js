@@ -9,6 +9,8 @@ import Constants from "../common/Constants";
 import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
 import useDocumentTitle from "../hooks/useDocumentTitle";
+import Lottie from "lottie-react";
+import animationData from "../assets/anim/ask_anim.json";
 
 const API_KEY = Cookies.get('gpt_api_key') || Constants.GPT_API || '';
 
@@ -95,25 +97,35 @@ function App() {
         });
     }
 
+    const lottieOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData, // Replace with your actual animation data
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
+
     return (
         <div>
-            <div
-                // style={{ position: "relative", height: "80vh", width: "100vw", padding: 30 }}
-            >
-                <MainContainer style={{borderRadius: 40, backgroundColor: "transparent"}} >
-                    <ChatContainer style={{borderRadius: 40, backgroundColor: "transparent"}} >
+            <div>
+                <MainContainer style={{ borderRadius: 40, backgroundColor: "transparent", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/* Lottie Animation */}
+                    <Lottie options={lottieOptions} height={200} width={200} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}   animationData={animationData} />
+
+                    <ChatContainer style={{ borderRadius: 40, backgroundColor: "transparent" }}>
+                        {/* Your existing chat container code */}
                         <MessageList
-                            style={{ borderRadius: 40, backgroundColor: "transparent",  margin: '8px 0' }}
+                            style={{ borderRadius: 40, backgroundColor: "transparent", margin: '8px 0' }}
                             scrollBehavior="smooth"
                             typingIndicator={isTyping ? <TypingIndicator content="FilmBuff is typing" /> : null}
                         >
                             {messages.map((message, i) => {
-                                // Adjust margin/padding within the Message component
                                 return <Message key={i} model={message} />;
                             })}
                         </MessageList>
 
-                        <MessageInput placeholder="Type message here" onSend={handleSend} style={{borderRadius: 40}} />
+                        <MessageInput placeholder="Type message here" onSend={handleSend} style={{ borderRadius: 40 }} />
                     </ChatContainer>
                 </MainContainer>
             </div>
