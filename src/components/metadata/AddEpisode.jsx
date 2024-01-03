@@ -16,12 +16,6 @@ const AddEpisode = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
-            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
-            navigate(0)
-        }
-    }, []);
 
     const axiosPrivate = useAxiosPrivate();
     const { auth } = useAuth();
@@ -55,6 +49,7 @@ const AddEpisode = () => {
         setIsSubmitted(true)
 
         try {
+            console.log(JSON.stringify(metadataEpisode));
             await axiosPrivate.post("/series/episode", metadataEpisode, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,7 +127,6 @@ const AddEpisode = () => {
                                     name='videoUrl'
                                     value={videoUrl}
                                     onChange={handleInputChange}
-                                    required
                                 />
                             </div>
                             <div className='mb-3'>
@@ -145,7 +139,6 @@ const AddEpisode = () => {
                                     name='description'
                                     value={description}
                                     onChange={handleInputChange}
-                                    required
                                 ></textarea>
                             </div>
                             <button type='submit' className='btn btn-outline-success'>

@@ -15,12 +15,6 @@ const EditMetadata = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
-            localStorage.setItem('bgImage', Constants.COMMON_BACKGROUND_URL);
-            navigate(0)
-        }
-    }, []);
     
     const { id } = useParams();
 
@@ -91,39 +85,57 @@ const EditMetadata = () => {
     }, [])
 
     //lazy
+    // const handleInputChange = (e) => {
+    //     setMetadata({...metadata, [e.target.name]: e.target.value})
+    // }
+
     const handleInputChange = (e) => {
-        setMetadata({...metadata, [e.target.name]: e.target.value})
-    }
+        const { name, value } = e.target;
+        setMetadata(prevMetadata => ({
+            ...prevMetadata,
+            [name]: name === 'seasonNumber' || name === 'episodeNumber' ? parseInt(value, 10) : value,
+        }));
+    };
+
 
     const { auth } = useAuth();
     const editMetadata = async(e) => {
         e.preventDefault();
-        try {
-            await axiosPrivate.put(`/metadatas/${id}`,
-                JSON.stringify({
-                    title: title,
-                    director: director === "" ? null : director,
-                    releaseYear: releaseYear === "" ? 0 : releaseYear,
-                    duration: duration === "" ? 0 : duration,
-                    description: description === "" ? null : description,
-                    genre: genre === "" ? null : genre,
-                    posterUrl: posterUrl === "" ? Constants.POSTER_PLACEHOLDER_URL : posterUrl,
-                    videoUrl: videoUrl === "" ? null : videoUrl,
-                    trailerUrl: trailerUrl === "" ? null : trailerUrl,
-                    soundtrackUrl: soundtrackUrl === "" ? null : soundtrackUrl,
-                    type: type === "" ? 'MOVIE' : type,
-                    seasonNumber: seasonNumber,
-                    episodeNumber: episodeNumber, // < 1 ? null : episode,
-                    backgroundImageUrl: backgroundImageUrl,
-                }), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth?.accessToken} `
-                },
-                withCredentials: true
+
+        const sMetadata =
+            JSON.stringify({
+                title: title,
+                director: director === "" ? null : director,
+                releaseYear: releaseYear === "" ? 0 : releaseYear,
+                duration: duration === "" ? 0 : duration,
+                description: description === "" ? null : description,
+                genre: genre === "" ? null : genre,
+                posterUrl: posterUrl === "" ? Constants.POSTER_PLACEHOLDER_URL : posterUrl,
+                videoUrl: videoUrl === "" ? null : videoUrl,
+                trailerUrl: trailerUrl === "" ? null : trailerUrl,
+                soundtrackUrl: soundtrackUrl === "" ? null : soundtrackUrl,
+                type: type === "" ? 'MOVIE' : type,
+                seasonNumber: seasonNumber,
+                episodeNumber: episodeNumber, // < 1 ? null : episode,
+                backgroundImageUrl: backgroundImageUrl,
             });
 
-        } catch (error) {
+
+        console.log(sMetadata)
+
+        try {
+            await axiosPrivate.put(
+                `/${'metadatas'}/${id}`,
+                sMetadata,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${auth?.accessToken}`
+                    },
+                    withCredentials: true
+                }
+            );
+    } catch (error) {
             console.error('Error saving metadata:', error);
         } finally {
             navigate(`${Paths.METADATA_PROFILE}/${id}`, { replace: true });

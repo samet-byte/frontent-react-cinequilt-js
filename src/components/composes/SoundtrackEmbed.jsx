@@ -4,8 +4,9 @@ const SoundtrackEmbed = ({ soundtrackLink }) => {
 
     if (soundtrackLink == null) return;
     // Regular expressions for Spotify and Deezer
-    const spotifyRegex = /^https:\/\/open\.spotify\.com\/(track|playlist|album)\/(\w+)$/i;
-    const deezerRegex = /^https:\/\/www\.deezer\.com\/(us\/)?(track|playlist|album)\/(\d+)$/i;
+    const spotifyRegex = /^https:\/\/open\.spotify\.com\/(track|playlist|album|podcast)\/(\w+)$/i;
+    const deezerRegex = /^https:\/\/www\.deezer\.com\/(us|tr|en)?\/(track|playlist|album|podcast)\/(\d+)$/i;
+
 
 
     // Function to extract the contentType and ID from the end of the URL

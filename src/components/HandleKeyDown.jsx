@@ -15,6 +15,10 @@ function HandleKeyDown({handler}) {
         if (event.keyCode === 9) {
             console.log('TAB key pressed!');
         }
+        if (event.key === ',') {
+            console.log(', key pressed!');
+            handler && handler();
+        }
         if (event.key === '.') {
             console.log('" key p{ressed!');
             handler && handler();

@@ -7,7 +7,7 @@ import {FaHeart} from "react-icons/fa";
 import Lottie from "lottie-react";
 import animationData from '../../assets/anim/loading_heart.json';
 
-const FavoriteButton = ({ metadataId, userId }) => {
+const FavoriteButton = ({ metadataId, userId, customStyle }) => {
     const [isFaved, setIsFaved] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
@@ -53,8 +53,7 @@ const FavoriteButton = ({ metadataId, userId }) => {
 
     return (
         <button
-
-            style={{border: 'blue'}}
+            style={customStyle}
             type={'button'}
             className="btn btn-outline ms-1"
             onClick={handleFavoriteToggle}

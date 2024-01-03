@@ -7,6 +7,8 @@ import HandleKeyDown from "../HandleKeyDown";
 import SignOutButton from "./SignOutButton";
 import useUserStuff from "../../hooks/useUserStuff";
 import Paths from "../../common/Paths";
+import app_icon from '../../assets/app_icon.png'
+import LiveDateTime from "./LiveDateTime";
 
 
 const NavBar = () => {
@@ -73,13 +75,15 @@ const NavBar = () => {
             `} bg="dark" variant="dark" expand="lg">
                 <Navbar.Brand>
                     <img
-                        alt=""
-                        src={Constants.APP_ICON_URL}
+                        alt="App Icon"
+                        // src={Constants.APP_ICON_URL}
+                        src={app_icon}
                         width={w_h}
                         height={w_h}
                         className="d-inline-block align-top"
                         loading="lazy"
                         onClick={toggleOffcanvas}
+                        style={{marginLeft: 20}}
                     />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"
@@ -133,17 +137,19 @@ const NavBar = () => {
                         {onlyOffcanvasRoutes.map((item, index) => (
                             <Link key={index} to={item.to} className="nav-link custom-nav-link mb-1" style={{ color: 'black' }}>{item.label}</Link>
                         ))}
+
                         <SignOutButton/>
 
                         {(() => {
+                            const currentYear = new Date().getFullYear();
                             switch (window.location.pathname) {
-                                case Paths.VIEW_METADATAS:
-                                    return <p>View Metadatas</p>;
+                                case Paths.HOME:
+                                    // return <p style={{bottom: 10}}>{currentYear}</p>;
+                                    return <div style={{marginTop: 40}}><LiveDateTime/></div>
                                 default:
                                     return null;
                             }
                         })()}
-
                     </Nav>
                 </Offcanvas.Body>
             </Offcanvas>

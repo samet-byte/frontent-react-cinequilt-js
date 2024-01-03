@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import Users from './Users';
+import useDocumentTitle from "../hooks/useDocumentTitle";
+import useUserStuff from "../hooks/useUserStuff";
 
 const Admin = () => {
+
+    const {userStuff} = useUserStuff();
+
+    useDocumentTitle(`Admin (${userStuff?.username})`);
     return (
         <div className="centered-container">
         <section>

@@ -34,6 +34,7 @@ const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo, bgImage }
                 src={posterUrl}
                 alt={`${title} Poster`}
                 style={{ filter: 'brightness(50%)', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                loading={'lazy'}
 
             />
 
@@ -65,7 +66,7 @@ const MovieCard = ({ title, releaseYear, mediaType, posterUrl, linkTo, bgImage }
                 }}
             >
                 <Card.Title>{title}</Card.Title>
-                <Card.Text>{`Release Year: ${releaseYear}`}</Card.Text>
+                <Card.Text>{`${releaseYear}`}</Card.Text>
             </Card.Body>
 
              {/*Link to "/info"*/}

@@ -37,6 +37,7 @@ import BackgroundImage from "./components/BackgroundImage";
 import About from "./components/composes/About";
 import ResetPassword from "./components/auth/ResetPassword";
 import AddEpisode from "./components/metadata/AddEpisode";
+import Footer from "./components/Footer";
 
 function NavBarConditional() {
     const nonNavBarRoutes = Paths.EXCLUDE_NAVBAR.map(route => `/${route}`);
@@ -51,6 +52,7 @@ function NavBarConditional() {
             </div>
             <BackgroundImage>
                 {AllRoutes()}
+                <Footer/>
             </BackgroundImage>
         </>
     ) : PublicRoutes();

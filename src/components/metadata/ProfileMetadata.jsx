@@ -20,6 +20,7 @@ import Loading from "../composes/Loading";
 import { useBgImage } from "../../hooks/useBgImage";
 import CustomPlayer from "../video/CustomPlayer";
 import Paths from "../../common/Paths";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 // film dizi sayfası
 
@@ -173,9 +174,9 @@ function ContentView(metadata, navigate, ParentFavButton) {
 								{/*<ProfileRow metadata={metadata.id} contentString="ID"/>*/}
 								<ProfileRow metadata={metadata.genre} contentString="Genre"/>
 								<ProfileRow metadata={metadata.description} contentString="Description"/>
-								<ProfileRow metadata={metadata.type} contentString="Type"/>
-								<ProfileRow metadata={metadata.videoUrl} contentString="Video URL"/>
-								<ProfileRow metadata={metadata.trailerUrl} contentString="Trailer URL"/>
+								<ProfileRow metadata={metadata.type } contentString="Type"/>
+								{/*<ProfileRow metadata={metadata.videoUrl} contentString="Video URL"/>*/}
+								{/*<ProfileRow metadata={metadata.trailerUrl} contentString="Trailer URL"/>*/}
 								{/*<ProfileRow metadata={metadata.soundtrackUrl} contentString="Soundtrack URL"/>*/}
 
 								<SoundtrackEmbed soundtrackLink={metadata.soundtrackUrl}/>
@@ -216,6 +217,8 @@ function NoMetadataView() {
 
 const ProfileMetadata = () => {
 
+
+
 	const [isLoaded, setIsLoaded] = useState(false);
 
     // let navigate = useNavigate();
@@ -242,6 +245,8 @@ const ProfileMetadata = () => {
 		type: null,
 	});
 
+
+	useDocumentTitle(metadata?.title)
 
 
 

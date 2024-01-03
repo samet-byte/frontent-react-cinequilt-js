@@ -9,7 +9,7 @@ import React from "react";
 import Paths from "../../common/Paths";
 
 // ekleme düzenleme ortak form
-export function MetadataForm(saveMetadata, type, handleInputChange, title, director, releaseYear, season, episode, duration, description, genre, posterUrl, videoUrl, trailerUrl, soundtrackUrl, backgroundImageUrl) {
+export function MetadataForm(saveMetadata, type, handleInputChange, title, director, releaseYear, seasonNumber, episodeNumber, duration, description, genre, posterUrl, videoUrl, trailerUrl, soundtrackUrl, backgroundImageUrl) {
     return <Form onSubmit={(e) => saveMetadata(e)}>
 
 
@@ -85,15 +85,15 @@ export function MetadataForm(saveMetadata, type, handleInputChange, title, direc
 
         {
             type === 'TV_SHOW' &&
-            <Form.Group controlId="season">
+            <Form.Group controlId="seasonNumber">
                 <Form.Label column sm="3">
-                    Season
+                    Season Number
                 </Form.Label>
 
                 <Form.Control
                     type="number"
-                    name="season"
-                    value={season || null}
+                    name="seasonNumber"
+                    value={seasonNumber || null}
                     onChange={(e) => handleInputChange(e)}
                     className="form-control col-span-small-6 mb-3 input-black-border"
                 />
@@ -105,15 +105,15 @@ export function MetadataForm(saveMetadata, type, handleInputChange, title, direc
 
 
             type === 'TV_SHOW' &&
-            <Form.Group controlId="episode">
+            <Form.Group controlId="episodeNumber">
                 <Form.Label column sm="3">
-                    Episode
+                    Episode Number
                 </Form.Label>
 
                 <Form.Control
                     type="number"
-                    name="episode"
-                    value={episode || null}
+                    name="episodeNumber"
+                    value={episodeNumber || null}
                     onChange={(e) => handleInputChange(e)}
                     className="form-control col-span-small-6 mb-3 input-black-border"
                 />

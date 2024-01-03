@@ -25,7 +25,7 @@ const Users = () => {
                 console.log(response.data);
                 isMounted && setUsers(response.data);
             } catch (err) {
-                console.log(err);
+                // console.log(err);
                 if (err.name !== "CanceledError") {
                     err.response?.status === 403
                         ? alert(err.name + " -> Unauthorized or Access Token Expired")
@@ -53,13 +53,11 @@ const Users = () => {
                 {}
             );
             console.log(response.data);
-            // Update the specific user in the users state instead of replacing the whole array
             setUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user.username === userToModify.username ? response.data : user
                 )
             );
-            // navigate(0) // This line might not be necessary
         } catch (err) {
             // ... (same error handling as before)
         } finally {

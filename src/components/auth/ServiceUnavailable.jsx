@@ -7,8 +7,11 @@ import useUserStuff from "../../hooks/useUserStuff";
 
 import ir_busted from "../../assets/img/ir_busted.png"
 import nk_busted from "../../assets/img/nk_busted.png"
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 function ServiceUnavailable() {
+
+    useDocumentTitle('Service Unavailable');
 
     const  { userStuff } = useUserStuff();
 

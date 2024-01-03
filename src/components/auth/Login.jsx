@@ -9,9 +9,13 @@ import useUserStuff from "../../hooks/useUserStuff";
 import Constants from "../../common/Constants";
 import Lottie from "lottie-react";
 import Paths from "../../common/Paths";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 const LOGIN_URL = '/auth/authenticate';
 
 const Login = () => {
+
+    useDocumentTitle('Login')
+
     const { setAuth, persist, setPersist } = useAuth(); // global auth
 
     const { updateUserStuff } = useUserStuff(); // global user info

@@ -8,6 +8,7 @@ import { MainContainer, ChatContainer, MessageList, Message, MessageInput, Typin
 import Constants from "../common/Constants";
 import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const API_KEY = Cookies.get('gpt_api_key') || Constants.GPT_API || '';
 
@@ -17,6 +18,8 @@ const systemMessage = {
 }
 
 function App() {
+
+    useDocumentTitle('FilmBuff')
 
     const navigate = useNavigate();
 

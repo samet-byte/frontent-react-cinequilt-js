@@ -15,7 +15,7 @@ const Paths = {
     ADD_METADATA: '/add-metadata',
     EXPERIMENTAL: '/x',
     SETTINGS: '/settings',
-    MANAGER: '/m',
+    MANAGER: '/manager',
     SIGN_UP: '/signup',
     SIGN_IN: '/signin',
     SIGN_OUT: '/signout',

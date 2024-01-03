@@ -8,9 +8,12 @@ import {SortView} from "../composes/SortView";
 import '../../experimental/x.css'
 import Paths from "../../common/Paths";
 import Constants from "../../common/Constants";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
+import HandleKeyDown from "../HandleKeyDown";
 
 function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrder, contentType, pageSize, pageNumber, filteredMetadatas, handlePrevPage, handleNextPage, totalPages, navigate) {
     return (
+        <>
         <div className="centered-container">
             <Search
                 search={search}
@@ -81,11 +84,15 @@ function ReturnAllMetadatas(search, setSearch, sortBy, handleSortChange, sortOrd
 
 
         </div>
+        </>
     );
 }
 
 // View all of them
 const AllMetadatas = () => {
+
+    useDocumentTitle('All Contents')
+
     const [metadatas, setMetadatas] = useState([]);
     const axiosPrivate = useAxiosPrivate();
     const [search, setSearch] = useState("");

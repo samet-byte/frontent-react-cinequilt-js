@@ -27,7 +27,6 @@ const FavouritesCarousel = ({ favourites }) => {
                 {favourites.map((favourite) => (
                     <Carousel.Item key={favourite.metadataId} className="custom-carousel custom-rounded"
                     >
-                        {/*<Link to={`${Paths.METADATA_PROFILE}/${favourite.metadataId}`} key={favourite.metadataId}>*/}
                             <MovieCard
                                 title={favourite.title?.trim()}
                                 posterUrl={favourite.posterUrl}
@@ -35,7 +34,6 @@ const FavouritesCarousel = ({ favourites }) => {
                                 mediaType={favourite.type}
                                 linkTo={`${Paths.METADATA_PROFILE}/${favourite.metadataId}`}
                             />
-                        {/*</Link>*/}
                     </Carousel.Item>
                 ))}
             </Carousel>

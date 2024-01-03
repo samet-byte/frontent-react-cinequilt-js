@@ -14,9 +14,12 @@ import { Badge, Col, Row } from "react-bootstrap";
 import "./local/Local.css";
 import "../experimental/x.css"
 import useLoading from "../hooks/useLoading";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const Home = () => {
 
+    const { userStuff } = useUserStuff();
+    useDocumentTitle(`Welcome ${userStuff?.username}!`)
 
     useEffect(() => {
         if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {
@@ -26,12 +29,12 @@ const Home = () => {
     }, []);
 
     const navigate = useNavigate();
-    const { userStuff } = useUserStuff();
     const [favourites, setFavourites] = useState([]);
-    const {isLoading, startLoading, stopLoading} = useLoading();
+    const {startLoading, stopLoading} = useLoading();
 
     useEffect(() => {
         startLoading();
+        let isMounted = true;
         const controller = new AbortController();
         const getFavs = async () => {
             try {
@@ -42,10 +45,12 @@ const Home = () => {
                 if (response.status === 404){
                     setFavourites([])
                 } else {
-                    setFavourites(response.data);
+                    isMounted && setFavourites(response.data);
                 }
             } catch (err) {
-                navigate("/", { replace: true });
+                if (err.name !== 'CanceledError') {
+                    navigate('/', {replace: true});
+                }
             } finally {
                 stopLoading();
             }
@@ -54,6 +59,7 @@ const Home = () => {
         getFavs();
 
         return () => {
+            isMounted = false;
             controller.abort();
         };
     }, [userStuff]);

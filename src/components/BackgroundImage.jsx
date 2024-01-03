@@ -41,7 +41,7 @@ function BackgroundImage({ children }) {
         height: '100%',
         zIndex: 5,
         background: `url("${bgImageView}") center center / cover fixed`,
-        filter: 'blur(8px)',
+        filter: 'blur(3px)',
     };
 
     const backgroundImageStyle = {

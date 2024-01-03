@@ -7,6 +7,7 @@ import videoBackground from '../../assets/video/thePianist1080.mp4';
 import './auth.css';
 import {Link} from "react-router-dom";
 import {Spinner} from "react-bootstrap";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const MAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -14,6 +15,9 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = '/auth/register';
 
 const Register = () => {
+
+    useDocumentTitle('Register')
+
     const userRef = useRef(null);
     const errRef = useRef(null);
 
@@ -118,7 +122,7 @@ const Register = () => {
             } else if (err.response?.status === 409) {
                 setErrMsg('Username Taken');
             } else {
-                setErrMsg('Registration Failed')
+                setErrMsg('User Not Found')
             }
             errRef.current.focus();
         } finally {
@@ -259,10 +263,8 @@ const Register = () => {
                             className="btn btn-info"
                             disabled={!validName || !validPwd || !validMatch || !selectedCountry}
                             style={buttonStyle}
-                            // onMouseOver={}
-                            // onMouseOut={}
                         >
-                            Because I'm Cold
+                            Because I was Cold
                         </button>
 
 
@@ -271,7 +273,6 @@ const Register = () => {
                     <p>
                         Already registered?<br />
                         <span className="line">
-                            {/*put router link here*/}
                             <Link to={"/login"}>
                                 Sign In
                             </Link>

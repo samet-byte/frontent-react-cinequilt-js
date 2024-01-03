@@ -9,7 +9,7 @@ const useLogout = () => {
 
     return async () => {
         const accessToken = auth?.accessToken;
-        console.log(`accessToken: ${accessToken}`);
+        // console.log(`accessToken: ${accessToken}`);
         setAuth({});
         clearUserStuff();
         Cookies.remove('refreshToken');

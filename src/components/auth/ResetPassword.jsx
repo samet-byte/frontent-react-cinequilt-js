@@ -11,10 +11,14 @@ import './auth.css';
 import {Link} from "react-router-dom";
 import {Spinner} from "react-bootstrap";
 import Paths from "../../common/Paths";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const MAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const ResetPassword = () => {
+
+    useDocumentTitle('Reset Password')
+
     const userRef = useRef(null);
     const errRef = useRef(null);
 
@@ -77,7 +81,7 @@ const ResetPassword = () => {
             } else if (err.response?.status === 409) {
                 setErrMsg('Username Taken');
             } else {
-                setErrMsg('Registration Failed')
+                setErrMsg('User Not Found')
             }
             errRef.current.focus();
         } finally {
@@ -92,7 +96,7 @@ const ResetPassword = () => {
                 <div className="overlay auth-content">
                     <section>
                         <h1 className="authHeader">
-                            U Better Check Your Mail Box ✉️📬!
+                            U Better Check Your Mail Box ✉️📬
                         </h1>
                         <p>
                             <Link to={"/login"}>

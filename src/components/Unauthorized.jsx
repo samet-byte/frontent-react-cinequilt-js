@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom"
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const Unauthorized = () => {
+
+    useDocumentTitle('Unauthorized');
     const navigate = useNavigate();
 
     const goBack = () => navigate(-1);

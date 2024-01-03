@@ -2,8 +2,12 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Constants from "../../common/Constants";
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 
 const LocalDirect = () => {
+
+
+    useDocumentTitle('Local Files')
 
     useEffect(() => {
         if (localStorage.getItem('bgImage') !== Constants.COMMON_BACKGROUND_URL) {

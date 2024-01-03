@@ -5,6 +5,7 @@ import errorAnimation from '../../assets/anim/errorLottie.json';
 import {useNavigate, useParams} from 'react-router-dom';
 import Constants from '../../common/Constants';
 import './Local.css'
+import useDocumentTitle from "../../hooks/useDocumentTitle";
 const M3UList = () => {
 
   const navigate = useNavigate();
@@ -26,8 +27,10 @@ const M3UList = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+    useDocumentTitle(`MyStuff ${data.length>0 ? `(${data.length})`:''}`)
 
   const parseM3UPlaylist = (playlistString) => {
+
     const lines = playlistString.split('\n');
     const playlistData = [];
 
@@ -129,18 +132,6 @@ const M3UList = () => {
                   </div>
               ))}
             </div>
-
-
-            {/*{selectedItem && (*/}
-            {/*    <div className={'center-item'}>*/}
-            {/*      <h2>Selected Video: {selectedItem.title}</h2>*/}
-            {/*      <video controls style={{ width: '50%', height: '50%' }}>*/}
-            {/*        <source src={selectedItem.url} type="video/mp4" />*/}
-            {/*        Your browser does not support the video tag.*/}
-            {/*      </video>*/}
-
-            {/*    </div>*/}
-            {/*)}*/}
           </div>
         </div>
       </div>

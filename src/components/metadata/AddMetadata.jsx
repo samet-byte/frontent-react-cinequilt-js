@@ -36,8 +36,8 @@ const AddMetadata = () => {
         trailerUrl: null,
         soundtrackUrl: null,
         type: 'MOVIE',
-        season: 0,
-        episode: 0,
+        seasonNumber: 0,
+        episodeNumber: 0,
         backgroundImageUrl: null
 
     })
@@ -54,8 +54,8 @@ const AddMetadata = () => {
         trailerUrl,
         soundtrackUrl,
         type,
-        season,
-        episode,
+        seasonNumber,
+        episodeNumber,
         backgroundImageUrl,
     } = metadata;
 
@@ -69,7 +69,7 @@ const AddMetadata = () => {
         setIsSubmitted(true)
 
         try {
-            await axiosPrivate.post("/metadatas", metadata, {
+            await axiosPrivate.post(`/${metadata.type === 'TV_SHOW' ? 'series' : 'metadatas'}`, metadata, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${auth?.accessToken} `
@@ -92,7 +92,7 @@ const AddMetadata = () => {
                     {
                         isSubmitted ?
                             <Loading/> :
-                            MetadataForm(saveMetadata, type, handleInputChange, title, director, releaseYear, season, episode, duration, description, genre, posterUrl, videoUrl, trailerUrl, soundtrackUrl, backgroundImageUrl)}
+                            MetadataForm(saveMetadata, type, handleInputChange, title, director, releaseYear, seasonNumber, episodeNumber, duration, description, genre, posterUrl, videoUrl, trailerUrl, soundtrackUrl, backgroundImageUrl)}
                 </div>
             </div>
         </div>

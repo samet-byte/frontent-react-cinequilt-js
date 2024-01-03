@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# Getting Started: CineQuilt React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -14,57 +14,152 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+### `npm start-server`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the server that allows CORS requests from the React app.
 
-### `npm run build`
+## Code Overview
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `src/App.js`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This is the main React component that renders the entire app. It contains the `Router` component that handles routing to different pages.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `src/components/`
 
-### `npm run eject`
+This folder contains all the React components that are used in the app.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### `src/video/`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This folder contains the video properties that are used in the app.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### `src/hooks/`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This folder contains the custom hooks that are used in the app. 
+They let you use state and other React features without writing a class.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Sample Code Blocks
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+#### `src/components/MovieCard.js`
+``` jsx
+<MovieCard
+    title={metadata.title?.trim()}
+    posterUrl={metadata.posterUrl}
+    releaseYear={metadata.releaseYear}
+    mediaType={metadata.type}
+    linkTo={`${Paths.METADATA_PROFILE}/${metadata.metadataId}`}
+/>
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### `src/video`
+``` jsx
+    {/*< usage of Video Components */}
+    <VideoEmbed embedUrl={episode.videoUrl} /> :
+    <CustomPlayer metadata={episode} />
+```
 
-### Analyzing the Bundle Size
+#### `src/components/App.js`
+``` jsx
+    {/* Background image listens useBgImage.js hook.*/}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    <BackgroundImage> 
+        ...
+        
+        <Route element={<RequireAuth allowedRoles={[Constants.ROLES.Admin]}/>}>
+            <Route path={Paths.ADMIN} element={<Admin/>}/>
+        </Route>
 
-### Making a Progressive Web App
+        <Route element={<RequireAuth
+            allowedRoles={[Constants.ROLES.User, Constants.ROLES.Manager, Constants.ROLES.Admin]}/>}>
+            <Route path={Paths.VIEW_METADATAS} element={<AllMetadatas/>}/>
+        </Route>
+        ...
+    </BackgroundImage>
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### `src/hooks/useAuth.js`
+``` jsx
+    const {auth} = useAuth();
+    ...
+    // While sending Bearer token to the server
+    const authHeader = auth ? {Authorization: `Bearer ${auth.token}`} : {};
+```
 
-### Advanced Configuration
+#### `src/components/RequireAuth.jsx`
+``` jsx
+import { useLocation, Navigate, Outlet } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+const RequireAuth = ({ allowedRoles }) => {
+    const { auth } = useAuth();
+    const location = useLocation();
 
-### Deployment
+    return (
+        auth?.roles?.find(role => allowedRoles?.includes(role))
+            ? <Outlet />
+            : auth?.accessToken //changed from user to accessToken to persist login after refresh
+                ? <Navigate to="/unauthorized" state={{ from: location }} replace />
+                : <Navigate to="/login" state={{ from: location }} replace />
+    );
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+export default RequireAuth;
+```
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### `src/api/axios.js`
+> **Warning:** The proxy set in package.json is used to redirect requests to the server.
+> ``` json
+>/// package.json     
+>"proxy": "http://localhost:8080", ...
+> ```
+
+``` jsx
+import axios from 'axios';
+
+const BASE_URL = '/api/v1';
+
+export default axios.create({
+    baseURL: '/api/v1'
+});
+
+export const axiosPrivate = axios.create({
+    baseURL: BASE_URL,
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true
+});
+```
+
+
+#### `src/server.js`
+> **Warning:**  `:/endpoint` allows any request to be made to the server for development purposes. This is not secure and shall be changed on production. 
+``` jsx
+const express = require("express");
+const cors = require("cors");
+const axios = require("axios");
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+app.get(`/:endpoint`, async (req, res) => {
+  try {
+    const endpoint = req.params.endpoint;
+    const response = await axios.get(`${endpoint}`);
+    const data = response.data;
+    console.log(data)
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(403).json({ error: 'Forbidden' });
+  }
+});
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+```

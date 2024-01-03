@@ -8,41 +8,50 @@ const useAxiosPrivate = () => {
     const { auth } = useAuth();
 
     useEffect(() => {
-
-        const requestIntercept = axiosPrivate.interceptors.request.use(
-            config => {
+        // Request interceptor
+        const requestInterceptor = axiosPrivate.interceptors.request.use(
+            (config) => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${auth?.accessToken} `;
+                    config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
                 }
                 return config;
-            }, (error) => Promise.reject(error)
+            },
+            (error) => Promise.reject(error)
         );
 
-        const responseIntercept = axiosPrivate.interceptors.response.use(
-            response => response,
+        // Response interceptor
+        const responseInterceptor = axiosPrivate.interceptors.response.use(
+            (response) => response,
             async (error) => {
-                const prevRequest = error?.config;
-                if (error?.response?.status === 403 && !prevRequest?.sent) {
-                    prevRequest.sent = true;
-                    const newAccessToken = await refresh();
-                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken} `;
-                    if (prevRequest && prevRequest !== '') {
-                        return axiosPrivate(prevRequest);
-                    } else {
-                        return Promise.reject(error);
+                if (error?.response?.status === 403) {
+                    const prevRequest = error?.config;
+                    if (prevRequest && !prevRequest?.sent) {
+                        prevRequest.sent = true;
+                        try {
+                            const newAccessToken = await refresh();
+                            prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                            return axiosPrivate(prevRequest);
+                        } catch (refreshError) {
+                            return Promise.reject(refreshError);
+                        }
                     }
                 }
                 return Promise.reject(error);
             }
         );
 
+        // Clean up interceptors
         return () => {
-            axiosPrivate.interceptors.request.eject(requestIntercept);
-            axiosPrivate.interceptors.response.eject(responseIntercept);
-        }
-    }, [auth, refresh])
+            if (requestInterceptor) {
+                axiosPrivate.interceptors.request.eject(requestInterceptor);
+            }
+            if (responseInterceptor) {
+                axiosPrivate.interceptors.response.eject(responseInterceptor);
+            }
+        };
+    }, [auth, refresh]);
 
     return axiosPrivate;
-}
+};
 
 export default useAxiosPrivate;
